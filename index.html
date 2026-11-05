@@ -295,7 +295,9 @@ img{-webkit-user-drag:none;user-drag:none}
 .jroul{font-size:13px;padding:22px 8px;margin:8px 0;background:#0c1330;color:#ffd23f;border-radius:12px;border:2px solid #ffffff33;min-height:70px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
 .jroul img{height:48px}.jroul.hard{color:#ff6a5a;border-color:#ff6a5a;animation:alp2 .7s infinite}
 .sumr{display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid #0001;text-align:left}.sumr img{height:44px}.sumr div{flex:1;font-size:8px;line-height:1.5}
-</style></head><body><div class="orbs"><i></i><i></i><i></i></div><div class="spot" id="spot"></div><main><div id="dex">
+</style><script data-goatcounter="https://pokeshinyhunter.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</head><body><div class="orbs"><i></i><i></i><i></i></div><div class="spot" id="spot"></div><main><div id="dex">
 <header class="top"><img id="mascot" alt="" title="¡Tócame!"><h1><span>POKE</span><b>SHINY HUNTER</b></h1><div class="tzone" id="tzone"></div></header>
 <div class="scr"><div class="hud" id="bar"></div><div class="xp" id="xpb"></div><div id="zsel"></div><div id="alr"></div><div class="hud" id="pasv"></div><section id="tab"></section></div>
 </div>
@@ -1189,7 +1191,7 @@ async function gUp(){if(!gTok)return;try{const id=await gFind(),body=JSON.string
 async function gSync(){try{const id=await gFind();if(id){const r=await fetch("https://www.googleapis.com/drive/v3/files/"+id+"?alt=media",{headers:gH()}).then(r=>r.json());
   if(r.ts>(S.ts||0)&&confirm("Hay un progreso más reciente en tu cuenta de Google. ¿Cargarlo?")){S=Object.assign(def(),r);save();S.lv=lvl();toast("Progreso cargado");go("egg");return}}await gUp();toast("Progreso sincronizado con Google")}catch(e){toast("Error al sincronizar con Google")}}
 async function gLogin(){if(!GCID)return toast("Falta el Client ID de Google (mira Datos)");
-  try{await loadGis();google.accounts.oauth2.initTokenClient({client_id:GCID,scope:"https://www.googleapis.com/auth/drive.appdata",callback:async r=>{if(r.access_token){gTok=r.access_token;await gSync();clearInterval(gTimer);gTimer=setInterval(gUp,120000)}}}).requestAccessToken()}catch(e){toast("No se pudo iniciar sesión con Google")}}
+  try{await loadGis();google.accounts.oauth2.initTokenClient({client_id:GCID,scope:"https://www.googleapis.com/auth/drive.appdata",callback:async r=>{if(r.access_token){gTok=r.access_token;try{window.goatcounter&&goatcounter.count&&goatcounter.count({path:"evento/google-login",title:"Inicio de sesión con Google",event:true})}catch(e){}await gSync();clearInterval(gTimer);gTimer=setInterval(gUp,120000)}}}).requestAccessToken()}catch(e){toast("No se pudo iniciar sesión con Google")}}
 function exportSave(){const b=new Blob([JSON.stringify(S)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="shiny-hunter-guardado.json";a.click()}
 function importSave(){const i=document.createElement("input");i.type="file";i.accept=".json";i.onchange=()=>{const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{S=Object.assign(def(),JSON.parse(r.result));save();S.lv=lvl();toast("Progreso importado");go("egg")}catch(e){toast("Archivo no válido")}};r.readAsText(f)};i.click()}
 function statsTab(){
@@ -1228,7 +1230,7 @@ function menuHtml(){return`<div style="font-size:12px;margin-bottom:8px">OPCIONE
   <p class="lbl" style="text-align:center;margin:10px 0 0">Creado por <b>Carlos Rojas</b> (Capi97)</p>`}
 function openMenu(){showModal(menuHtml())}
 function privacy(){showModal(`<div style="font-size:11px;margin-bottom:8px">DATOS Y PRIVACIDAD</div><div class="st-c" style="line-height:2">
- <b>Qué se guarda:</b> si aceptas, tu progreso, tus preferencias (idioma, volumen) y una caché con datos de los Pokémon se guardan <b>solo en tu navegador</b> (almacenamiento local). No usamos cookies de publicidad ni de seguimiento, ni analítica.<br>
+ <b>Qué se guarda:</b> si aceptas, tu progreso, tus preferencias (idioma, volumen) y una caché con datos de los Pokémon se guardan <b>solo en tu navegador</b> (almacenamiento local). No usamos cookies de publicidad ni de seguimiento. Medimos las visitas de forma anónima y sin cookies (GoatCounter).<br>
  <b>Servicios externos:</b> los sprites y rugidos se cargan desde GitHub (PokeAPI/sprites), los datos de los Pokémon desde pokeapi.co y la tipografía desde Google Fonts. Esos servicios reciben tu dirección IP como en cualquier web.<br>
  <b>Google (opcional):</b> si usas «Google», tu progreso se guarda en una carpeta privada de tu Google Drive. Solo se accede a ese archivo.<br>
  <b>Si eliges «Jugar sin guardar»:</b> no se escribe nada en tu navegador y el progreso se pierde al cerrar.<br>
@@ -1344,7 +1346,7 @@ function showStart(){
   <div class="lens st-lens"><i></i></div><div class="st-t1">POKE</div><div class="st-t2">SHINY HUNTER</div><img class="st-egg" src="${EGGI.leg[0]}" alt="">
   <div class="st-b"><button class="g" ${dec?"":"disabled"} onclick="startGame()">▶ ${sv?"Continuar":"Jugar"}</button>${sv?`<button class="w" ${dec?"":"disabled"} onclick="newGame()">Nueva partida</button>`:""}<button onclick="openMenu()">Opciones</button></div>
   <div class="row" style="justify-content:center">${langBtns(2)}<button class="w" onclick="S.mute=!S.mute;save();music();showStart()">${S.mute?"Sonido: NO":"Sonido: SÍ"}</button></div>
-  ${dec?"":`<div class="box st-c"><b>Datos y almacenamiento</b><br>Esta web guarda tu progreso y tus preferencias en el almacenamiento local de tu navegador (similar a las cookies, pero solo para el juego). No usamos publicidad, seguimiento ni analítica. Los sprites van incluidos en el juego; solo los rugidos y datos extra se cargan de GitHub y PokeAPI.<div class="row" style="margin-top:8px"><button class="g" onclick="CFG.ok=1;CFG.nosave=0;saveCfg();save();showStart()">Aceptar y guardar</button><button class="w" onclick="CFG.nosave=1;showStart()">Jugar sin guardar</button><button class="w" onclick="privacy()">Más información</button></div></div>`}
+  ${dec?"":`<div class="box st-c"><b>Datos y almacenamiento</b><br>Esta web guarda tu progreso y tus preferencias en el almacenamiento local de tu navegador (similar a las cookies, pero solo para el juego). No usamos publicidad ni seguimiento. Medimos las visitas de forma anónima y sin cookies (GoatCounter). Los sprites van incluidos en el juego; solo los rugidos y datos extra se cargan de GitHub y PokeAPI.<div class="row" style="margin-top:8px"><button class="g" onclick="CFG.ok=1;CFG.nosave=0;saveCfg();save();showStart()">Aceptar y guardar</button><button class="w" onclick="CFG.nosave=1;showStart()">Jugar sin guardar</button><button class="w" onclick="privacy()">Más información</button></div></div>`}
   ${dec?`<button class="w" onclick="privacy()">Datos y privacidad</button>`:""}
   <p class="lbl" style="color:#cfd8ff;margin-top:14px">Proyecto de fans sin ánimo de lucro, sin afiliación con Nintendo, Game Freak, Creatures ni The Pokémon Company. Pokémon y sus nombres son marcas de sus respectivos propietarios.</p>
   <p class="lbl" style="color:#fff;margin-top:10px">Creado por <b>Carlos Rojas</b> · <b>Capi97</b></p></div>`;
