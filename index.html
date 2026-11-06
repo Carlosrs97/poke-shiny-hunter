@@ -388,7 +388,7 @@ const MAIN=ZN.map((_,i)=>{const l=D.sp.filter(s=>s.z===i&&s.h&&s.t===4);return i
 const EP={rare:120,epic:280,leg:750};
 const IT=[["cal","Calcio",150,"Los cascarones se rompen sin ceremonias · 5 min",LS+"items/calcium.png"],["inc","Incienso",400,"Un aroma místico atrae a lo brillante · 5 min",LS+"items/luck-incense.png"],["cha","Polvo veloz",2500,"Los huevos comunes brotan sin fin · 5 min",LS+"items/quick-powder.png"]];
 const def=()=>({zone:0,pz:0,zu:[0],zc:{},shbox:[],evos:0,eggs:0,sh:0,money:0,sold:0,uid:1,cap:60,capu:0,box:[],inv:{pb:10,gb:0,ub:0,mb:0,rare:0,epic:0,leg:0,cal:0,inc:0,cha:0,cal15:0,cal60:0,inc15:0,inc60:0,cha15:0,cha60:0,sil:0,gol:0,stone:0,tok:0},until:{cal:0,inc:0,cha:0},seen:{},shiny:{},sel:"n",opened:{rare:0,epic:0,leg:0},claimed:{},mute:false,lastSh:0,dist:0,qs:{},qd:0,exp:null,cdE:0,xd:0,tr:{},td:0,s5:0,xp:0,lv:1,pas:{},rc:0,rb:0,tut:{},jg:0,jst:{w:0,h:0,p:0,t:{}},trg:null,ce:10,cet:Date.now(),dsp:0,dcc:0,drops:0,ist:{rare:0,epic:0,leg:0},evoSeen:{},nat:0,jc:{},dcur:null,cc:0,wild:null,bgu:0,idx:{},dzann:0,acc:"",icon:0,icsh:0,tseen:null,wt:{}});
-const TESTM=/[#?&]test/.test(location.href),SK=TESTM?"sheh7test":"sheh7";
+const TESTM=false,SK="sheh7";
 let S=def();try{const j=localStorage.getItem(SK);if(j)S=Object.assign(def(),JSON.parse(j))}catch(e){}
 ["cal15","cal60","inc15","inc60","cha15","cha60"].forEach(k=>{if(!(S.inv[k]>0))S.inv[k]=0});S.pas=S.pas||{};S.idx=S.idx||{};S.bgu=S.bgu||0;["pb","gb","ub","mb"].forEach(k=>{if(!(S.inv[k]>0))S.inv[k]=0});if(S.inv.tok>0){S.money+=S.inv.tok*5000;S.inv.tok=0}
 if(!S.mig20){S.mig20=1;if(S.lv>=5)S.inv.pb+=15}
@@ -1471,7 +1471,6 @@ function menuHtml(){return`<div style="font-size:12px;margin-bottom:8px">OPCIONE
   <div class="row" style="justify-content:center"><button class="${S.mute?"r":"w"}" onclick="S.mute=!S.mute;save();music();openMenu($('#start').style.display==='flex')">${S.mute?"Sonido: NO":"Sonido: SÍ"}</button><button class="${CFG.calm?"on":"w"}" onclick="CFG.calm=CFG.calm?0:1;saveCfg();applyTheme();openMenu($('#start').style.display==='flex')">${CFG.calm?"Sin destellos: SÍ":"Sin destellos: NO"}</button></div>
   <div class="row" style="justify-content:center"><button onclick="exportSave()">Exportar</button><button onclick="importSave()">Importar</button><button class="g" onclick="gLogin()">Google</button></div>
   <div class="row" style="justify-content:center"><button class="w" onclick="privacy()">Datos y privacidad</button><button class="w" onclick="bugForm()">Informar de un bug</button>${$("#start").style.display==="flex"?"":`<button class="w" onclick="closeModal();showStart()">Pantalla de inicio</button>`}</div>
-  <div class="row" style="justify-content:center">${TESTM?`<button class="r" onclick="location.hash='';location.reload()">Salir del modo prueba</button>`:`<button class="w" onclick="location.hash='test';location.reload()">Modo prueba</button>`}</div>
   <p class="lbl" style="text-align:center;margin:10px 0 0">Creado por <b>Carlos Rojas</b> (Capi97)</p>`}
 function openMenu(){showModal(menuHtml())}
 function privacy(){showModal(`<div style="font-size:11px;margin-bottom:8px">DATOS Y PRIVACIDAD</div><div class="st-c" style="line-height:2">
@@ -1499,8 +1498,6 @@ function testDo(k){
  if(k==="eggs")S.ce=ceCap();
  if(k==="sh"){const x=pick(D.sp.filter(x=>x.z===S.zone&&x.t<4));S.shbox.push(mk(x.id,1));S.shiny[x.id]=(S.shiny[x.id]||0)+1;seenAdd(x.id);S.sh++}
  save();head();go(tab);toast("Hecho")}
-const testPanel=()=>`<div class="box" style="border-color:#e8a800"><b>MODO PRUEBA</b><br><span class="lbl">Partida separada: no toca tu progreso real.</span><div class="row"><button class="g" onclick="testDo('all')">Desbloquear todo</button><button onclick="testDo('m')">+₽1M</button><button onclick="testDo('mx')">₽×10</button><button onclick="testDo('dex')">Registrar Pokédex</button><button onclick="testDo('shdex')">Pokédex + shinies</button><button onclick="testDo('pc')">Llenar PC (zona)</button><button onclick="testDo('sh')">Dar shiny</button><button onclick="testDo('cd')">Quitar esperas + objetos 1 h</button><button onclick="testDo('tut')">Repetir tutoriales</button><button onclick="testDo('wild')">Forzar salvaje</button><button onclick="testDo('drop')">+3 Pokédrops</button><button onclick="testDo('eggs')">Llenar guardería</button></div></div>`;
-const _stats=statsTab;statsTab=()=>{_stats();if(TESTM)$("#tab").insertAdjacentHTML("afterbegin",testPanel())};
 let SSI=0;
 function sstars(on){clearInterval(SSI);if(!on)return;let idle=0;SSI=setInterval(()=>{const f=$("#fx");if(!f||!f.classList.contains("on")){if(++idle>12)clearInterval(SSI);return}idle=0;const r=f.getBoundingClientRect();for(let i=0;i<2;i++){const e=document.createElement("i");e.className="sst";e.textContent=pick(["✦","✧","★","✦"]);e.style.left=(r.width/2+(Math.random()-.5)*Math.min(r.width,360))+"px";e.style.top=(r.height/2+(Math.random()-.5)*300-30)+"px";e.style.fontSize=(10+Math.random()*20)+"px";e.style.color=pick(["#ffe27a","#fff","#9fe8ff","#ffd23f"]);f.appendChild(e);e.onanimationend=()=>e.remove()}},110)}
 /* ---------- Guardería ---------- */
@@ -1847,6 +1844,5 @@ setInterval(()=>{if(S.lv>=20&&!S.dzann&&$("#start").style.display!=="flex"){S.dz
 setInterval(()=>{const f=$("#fx"),m=$("#fm");if(!f||!m||!f.classList.contains("on")||!m.complete||!m.naturalWidth||m.dataset.id===undefined||!(m.src.includes("/animated/")||m.dataset.f))return;const w=m.naturalWidth*(m.dataset.f?3.4:5)*(m.dataset.al==="1"?1.35:1);if(Math.abs((parseFloat(m.style.width)||0)-w)>1)m.style.width=w+"px"},120);
 setInterval(save,30000);document.addEventListener("visibilitychange",()=>{if(document.hidden){save();gUp()}});
 S.zu=[...new Set(S.zu)];S.lv=lvl();chkWorlds();
-if(TESTM){$("h1").insertAdjacentHTML("beforeend",'<small style="font-size:10px;color:#ffd23f;margin-left:6px">PRUEBA</small>');if(!hasSave())testAll()}
 go(S.exp?"expe":"egg");document.documentElement.lang=CFG.lang;showStart();netBoot();
 </script></body></html>
