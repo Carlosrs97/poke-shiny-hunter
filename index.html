@@ -820,7 +820,7 @@ async function openEgg(){
     msg.innerHTML=`<span class="q" style="background:${Q[m.t].c}">${Q[m.t].n}</span> ${m.n} <br><span class="big">${stars(ent.st)}</span>${first?" · ¡NUEVO!":""}`;
     if(m.t>=3){snd(D.snd.cym);arp([523,659,784,1047]);spawn(40*(m.t-2),innerWidth/2,innerHeight/2,{c:Q[m.t].c,sp:18})}
     if(ent.st>=4){arp([880,1175,1568],.06);spawn(ent.st*14,innerWidth/2,innerHeight/2,{c:"#ffc400",sp:16,l:60,s:5})}
-    msg.insertAdjacentHTML("beforeend",'<br><button class="g" id="okb" style="margin-top:6px">Aceptar</button>');await new Promise(r=>{const b=$("#okb");if(!b)return r();b.onclick=r;setTimeout(r,120000)});
+    const OKB='<br><button class="g" id="okb" style="margin-top:6px">Aceptar</button>';msg.insertAdjacentHTML("beforeend",OKB);await new Promise(r=>{let done=0,w=0;const fin=()=>{if(done)return;done=1;clearInterval(w);mon.onclick=null;r()};w=setInterval(()=>{if(tab!=="egg"||!$("#msg"))return fin();if(!$("#okb"))$("#msg").insertAdjacentHTML("beforeend",OKB);$("#okb").onclick=fin},400);$("#okb").onclick=fin;mon.onclick=fin;setTimeout(fin,120000)});
   }
   mon.style.display="none";msg.textContent="";if(S.sel!=="n"&&S.inv[S.sel]<1)S.sel=S.zone===DZ?"dis":"n";if(hasEggs()){egg.src=EGGI[S.sel][0];egg.style.visibility="visible";egg.classList.add("drop");await z(500*SPD);egg.classList.remove("drop")}
   busy=opening=false;head();if(tab==="egg")eggTab()
@@ -848,7 +848,7 @@ function ditStart(){clearInterval(DIT);DX=20+Math.random()*60;DTX=DX;const d=$("
   DIT=setInterval(()=>{const d=$("#dit");if(!d||tab!=="egg"){clearInterval(DIT);return}if(hasEggs()&&!busy){clearInterval(DIT);eggTab();return}if(DBUSY)return;
     if(Math.abs(DTX-DX)<.5){d.classList.remove("wk");if(Math.random()<.015)DTX=8+Math.random()*84;else if(Math.random()<.003)ditSay(pick(["¡Ditto!","Ditto~","¿Ditto?","♪ Dittooo ♪"]),1)}
     else{d.classList.add("wk");DX+=Math.sign(DTX-DX)*.3;d.style.left=DX+"%";d.firstChild.style.transform=`scaleX(${DTX>DX?-1:1})`}},40)}
-function ditSay(t,cry){const m=$("#msg")||$("#nmsg");if(m){m.innerHTML=`<span class="dsay">${t}</span>`;clearTimeout(ditSay.t);ditSay.t=setTimeout(()=>{const m=$("#msg")||$("#nmsg");if(m)m.innerHTML=""},2400)}if(cry)dittoSnd()}
+function ditSay(t,cry){const m=$("#dit")?$("#msg"):$("#nd")?$("#nmsg"):null;if(m){m.querySelectorAll(".dsay").forEach(x=>x.remove());const sp=document.createElement("span");sp.className="dsay";sp.innerHTML=t;m.appendChild(sp);setTimeout(()=>sp.remove(),2400)}if(cry)dittoSnd()}
 async function ditTap(sel){const d=$(sel||"#dit");if(!d||DBUSY)return;const now=Date.now();DTAP=DTAP.filter(x=>now-x<1600);DTAP.push(now);S.ditp=(S.ditp||0)+1;if(S.ditp===30){toast("Ditto te ha cogido mucho cariño ♥");save()}
   const im=d.tagName==="IMG"?d:d.firstChild,r=d.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;DBUSY=1;d.classList.remove("wk");
   if(DTAP.length>=6){DTAP=[];ditSay("¡Demasiadas cosquillas! Ditto se ha derretido…",1);d.classList.add("melt");await z(2600);d.classList.remove("melt");ditSay("¡Ditto!",1);DBUSY=0;return}
@@ -881,7 +881,7 @@ function showModal(html){$("#dm").innerHTML=`<div class="box">${html}<div class=
 function closeModal(){$("#dm").classList.remove("on","drop");DR=null;if(window._a2pz){_a2pz=0;PAUSED=false}setTimeout(nqRun,350)}
 /* cola de avisos: de uno en uno, el siguiente sale al cerrar el anterior */
 const NQ=[];const NB='<span class="nwb">¡NUEVO!</span>';
-const nqFree=()=>!$("#dm").classList.contains("on")&&!annRun&&!opening&&!DR&&!$("#fx").classList.contains("on")&&!$("#tour")&&!$("#tut")&&$("#start").style.display!=="flex";
+const nqFree=()=>!$("#dm").classList.contains("on")&&!annRun&&!opening&&!busy&&!DBUSY&&!DR&&!$("#fx").classList.contains("on")&&!$("#tour")&&!$("#tut")&&$("#start").style.display!=="flex";
 function notify(html){NQ.push(html);nqRun()}
 function nqRun(){if(!NQ.length||!nqFree())return;showModal(NQ.shift())}
 setInterval(nqRun,500);
@@ -947,7 +947,7 @@ function mkBadge(i){const c=document.createElement("canvas");c.width=c.height=16
  g.fillStyle=b;BSY[i].forEach((r,y)=>[...r].forEach((ch,x)=>{if(ch==="#")g.fillRect(4+x,4+y,1,1)}));return c.toDataURL()}
 const BDGI=BDG.map((_,i)=>mkBadge(i));
 const waitEnd=async(fx,min)=>{await z(min);$("#fs").insertAdjacentHTML("beforeend",'<div style="color:#ffe27a;margin-top:10px">Toca para continuar</div>');await waitTap(fx,300)};
-async function runAnn(){if(annRun||busy||!ANQ.length||$("#dm").classList.contains("on")||NQ.length)return;annRun=busy=true;while(ANQ.length){while($("#dm").classList.contains("on")||$("#tut")||$("#tour"))await z(300);const a=ANQ.shift();try{await annFx(a)}catch(e){}}annRun=busy=false;head();go(tab);setTimeout(nqRun,300)}
+async function runAnn(){if(annRun||busy||!ANQ.length||$("#dm").classList.contains("on")||NQ.length)return;annRun=busy=true;while(ANQ.length){while($("#dm").classList.contains("on")||$("#tut")||$("#tour")||opening)await z(300);const a=ANQ.shift();try{await annFx(a)}catch(e){}}annRun=busy=false;head();go(tab);setTimeout(nqRun,300)}
 async function annFx(a){
   const{fx,fe,fm,ft,fs,rays,fl}=fxEls(),W=innerWidth,H=innerHeight,fire=(n,x,y)=>spawn(n,x??W*(.2+Math.random()*.6),y??H*(.2+Math.random()*.4),{sp:26,l:110});
   fx.className="on t2";fe.style.display="none";ft.style.display="block";fs.style.display="block";rays.style.display="block";fm.removeAttribute("data-id");fm.removeAttribute("data-s");fm.style.filter="drop-shadow(0 0 16px #ffe27a)";fm.style.animation="bn .9s";fs.innerHTML="";let rain=0;
