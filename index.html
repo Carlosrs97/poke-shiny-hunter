@@ -59,7 +59,7 @@ nav{margin-bottom:8px}.nr{display:grid;gap:5px;margin-bottom:5px}nav button{padd
 #rays{position:absolute;width:1600px;height:1600px;left:50%;top:50%;margin:-800px 0 0 -800px;background:repeating-conic-gradient(rgba(255,226,110,.5) 0 9deg,transparent 9deg 18deg);-webkit-mask:radial-gradient(#000 5%,transparent 62%);mask:radial-gradient(#000 5%,transparent 62%);animation:sp 8s linear infinite;display:none}
 @keyframes sp{to{transform:rotate(360deg)}}
 #fe{width:150px;animation:sk .25s infinite,gw .5s infinite alternate}@keyframes gw{to{filter:drop-shadow(0 0 30px #fff) brightness(1.6)}}
-#fm{position:relative;z-index:2;display:none;animation:bn .9s}#fmw{position:relative;z-index:2;display:inline-block;line-height:0;filter:drop-shadow(0 0 16px #ffe27a)}
+#fm{position:relative;z-index:2;display:none;animation:bn .9s;will-change:filter}#fmw{position:relative;z-index:2;display:inline-block;line-height:0;isolation:isolate;filter:drop-shadow(0 0 16px #ffe27a)}
 @keyframes bn{0%{transform:scale(0)}60%{transform:scale(1.35)}100%{transform:scale(1)}}
 #ft{position:relative;z-index:2;font-size:clamp(20px,7vw,42px);margin-top:14px;background:linear-gradient(90deg,#ff5e5e,#ffd23f,#5eff8a,#5ecbff,#c45eff,#ff5e5e);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:rb 1s linear infinite,sl .6s;filter:drop-shadow(3px 3px 0 #000)}
 @keyframes rb{to{background-position:300% 0}}@keyframes sl{from{transform:scale(5);opacity:0}}
@@ -861,7 +861,7 @@ async function ditTap(sel){const d=$(sel||"#dit");if(!d||DBUSY)return;const now=
   else{d.classList.add("tall");tone(200,0,.5,"sine",.04,700);ditSay("Ditto se estira todo lo que puede…");await z(1200);d.classList.remove("tall");dittoSnd()}
   DBUSY=0}
 /* ---------- efectos a pantalla completa ---------- */
-const fmF=v=>{const fm=$("#fm"),w=$("#fmw"),ds=v.match(/drop-shadow\([^)]*\)/g),rest=v.replace(/drop-shadow\([^)]*\)/g,"").trim();if(!fm)return;fm.style.filter=v==="none"?"none":rest;if(w)w.style.filter=v===""?"":ds?ds.join(" "):"none"};
+const fmF=v=>{const fm=$("#fm"),w=$("#fmw"),ds=v.match(/drop-shadow\([^)]*\)/g),rest=v.replace(/drop-shadow\([^)]*\)/g,"").trim();if(!fm)return;const wf=v===""?"":ds?ds.join(" "):"none",was=fm.style.filter;fm.style.filter=v==="none"?"none":rest;if(w){w.style.filter=wf;if(was&&was!=="none"&&!rest){w.style.filter="none";void w.offsetWidth;fm.style.transform="translateZ(0)";requestAnimationFrame(()=>{w.style.filter=wf;requestAnimationFrame(()=>{fm.style.transform=""})})}}};
 const fxEls=()=>({fx:$("#fx"),fe:$("#fe"),fm:$("#fm"),ft:$("#ft"),fs:$("#fs"),rays:$("#rays"),fl:$("#fl")});
 const flash=fl=>{fl.classList.remove("go");void fl.offsetWidth;fl.classList.add("go")};
 const waitTap=(fx,min)=>new Promise(r=>{let ok=false;setTimeout(()=>ok=true,min);fx.onclick=()=>ok&&r();setTimeout(r,15000)});
@@ -2271,7 +2271,7 @@ async function onAuth(u){
  showStart()}
 const SID=Math.random().toString(36).slice(2,10)+Date.now().toString(36),sidOf=d=>{const m=/^\{"sid":"([a-z0-9]+)"/.exec(String(d||"").slice(0,48));return m?m[1]:""},mkD=(sid,x)=>JSON.stringify(Object.assign({sid},S,{sid},x||{}));
 let KICK=0,unW=null,hoWait=null,myTs=0;
-const BUILD="58i";let updN=0;
+const BUILD="58j";let updN=0;
 setInterval(async()=>{if(updN||location.protocol!=="https:")return;try{const t=await fetch(location.pathname+"?v="+Date.now(),{cache:"no-store"}).then(r=>r.text()),m=/const BUILD="([^"]+)"/.exec(t);if(m&&m[1]!==BUILD){updN=1;notify(`<div style="font-size:12px;margin-bottom:6px">¡VERSIÓN NUEVA!</div><p>Hay una versión nueva del juego. Recarga para jugar con lo último.</p><div class="row" style="justify-content:center"><button class="g" onclick="cloudTick(true).finally(()=>location.reload())">Recargar ahora</button></div>`)}}catch(e){}},6e5);
 function kickUi(){if($("#kick"))return;busy=true;try{jstop()}catch(e){}const d=document.createElement("div");d.id="kick";d.innerHTML=`<div class="box"><div style="font-size:12px;margin-bottom:8px">PARTIDA ABIERTA EN OTRO DISPOSITIVO</div><p>Tu cuenta se ha abierto en otro dispositivo o pestaña, y se ha llevado tu partida con todo el progreso.</p><p class="lbl">Para que no se pierda nada, solo puede haber una partida abierta a la vez con la misma cuenta. Aquí ya no se guarda nada.</p><div class="row" style="justify-content:center"><button class="g" onclick="location.reload()">Jugar en este dispositivo</button></div></div>`;document.body.appendChild(d)}
 function onKick(){if(KICK)return;KICK=1;window._kick=1;kickUi()}
