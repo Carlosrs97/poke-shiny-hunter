@@ -1670,8 +1670,8 @@ async function captureAnim(w,k,r){const ov=capEl();ov.className="on";mepic(14);
     ps.getAnimations().forEach(a=>a.cancel());ps.style.visibility="visible";ps.style.opacity=1;tx.textContent="¡Oh no! ¡Se ha escapado!";await A(ps,[{transform:"scale(.05)"},{transform:"scale(1)"}],{duration:380,easing:"ease-out"});await z(1000);return false
   }finally{ov.className="";ov.innerHTML="";mback()}}
 const ballRow=(fn,p)=>`<div class="row">${BK.filter(k=>k!=="mb"||S.inv.mb>0).map(k=>`<button class="r" ${S.inv[k]>0?"":"disabled"} onclick="${fn}('${k}')"><img data-h src="${PBN[BT[k]]}" style="height:22px;vertical-align:middle"> ${ITM[k][0]} ×${S.inv[k]||0}${ROT()&&k!=="mb"?" ("+Math.round(Math.min(.99,p*BM[k])*100)+"%)":""}</button>`).join("")}</div>${S.pas.gaf?'<div class="lbl">Gafas Especiales: tus lanzamientos pueden ser críticos</div>':""}${ballTot()<1?'<div class="lbl" style="color:#ff9a8a">Sin Pokéballs: consigue más en la Tienda</div>':""}`;
-const CPB=[.85,.7,.5,.3,.12],FLEE=[0,.03,.08,.15,.25],fleeP=w=>FLEE[BY[w.id].t]+(w.al?.1:0);
-const catchP=x=>{const W=x.exp.wild,AV=hasAt(x.exp.my,"av")?1.15:1,w=bval(W.id)*STV[W.st-1]*(W.al?1.2:1),m=val(x.exp.my),r=Math.min(1.6,Math.max(.5,Math.pow(m/w,.35)));return Math.min(.95,Math.max(.02,CPB[BY[W.id].t]*r*(W.al?.7:1)*AV))};
+const CPB=[.85,.7,.5,.3,.12],FLEE=[0,.03,.08,.15,.25],fleeP=w=>w.s?0:FLEE[BY[w.id].t]+(w.al?.1:0);
+const catchP=x=>{const W=x.exp.wild,AV=hasAt(x.exp.my,"av")?1.15:1,w=bval(W.id)*STV[W.st-1]*(W.al?1.2:1),m=val(Object.assign({},x.exp.my,{s:0})),r=Math.min(1.6,Math.max(.5,Math.pow(m/w,.35)));return Math.min(.95,Math.max(.02,CPB[BY[W.id].t]*r*(W.al?.7:1)*AV))};
 let XLN=0,XLZ="";
 function xTrack(x){const P=k=>k*25,res=x.res||[],cur=x.n,key=x.z+"|"+(x.list&&x.list[0]?x.list[0].id:"")+"|"+x.my.u,from=key===XLZ&&XLN&&XLN<cur?XLN:cur;
  const nd=[0,1,2,3,4].map(k=>{const i=k+1,w=x.list&&x.list[k],past=i<cur,c=res[k];return`<div class="nd${past?(c===0?" f":" c"):""}${i===cur?" cur":""}${i===5?" fin":""}" style="left:${P(k)}%">${past&&w?`<img src="${stat(w.id,w.s)}">`:i===cur&&w?`<img src="${stat(w.id,w.s)}">`:i===5?"⭐":"?"}<b>${i===5?"★":i}</b></div>`}).join("");
