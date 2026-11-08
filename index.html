@@ -616,7 +616,7 @@ function wplay(ctx,out,t,st,z,dur){
   if((sec===2||full)&&!nt&&R8<.5)tone(f(chord[(st>>1)%chord.length]+24),t,dur*1.4,"sine",.012,.003)}}
 const stepDur=m=>60/m.bpm/2;
 let mEp=-1,mt=0,mz=-1,MGn=null,mSt=0,mNt=0,mSc=null;
-function mstart(){clearInterval(mt);mz=mEp>=0?mEp:S.zone;if(S.mute)return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();
+function mstart(){clearInterval(mt);mz=mEp>=0?mEp:S.zone;try{if(MGn){const o=MGn;MGn=null;try{o.gain.cancelScheduledValues(0);o.gain.setValueAtTime(o.gain.value,AC.currentTime);o.gain.linearRampToValueAtTime(0,AC.currentTime+.12)}catch(e){}setTimeout(()=>{try{o.disconnect()}catch(e){}},300)}}catch(e){}if(S.mute)return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();
   if(!MGn){MGn=AC.createGain();MGn.connect(AC.destination)}mSt=0;mNt=AC.currentTime+.1;
   if(mz>=0&&mz<W2.length){const d2=60/W2[mz].bpm/4;mt=setInterval(()=>{if(S.mute){clearInterval(mt);return}MGn.gain.value=Math.min(3,CFG.mus/50*2.2);while(mNt<AC.currentTime+.2){try{wplay(AC,MGn,mNt,mSt,mz,d2)}catch(e){}mNt+=d2;mSt++}},40);return}
   mSc=mscore(mz);const m=mSc.m;
