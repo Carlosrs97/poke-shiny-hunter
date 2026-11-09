@@ -2,7 +2,7 @@
    - La página: primero red (para recibir siempre la última versión); sin conexión, la copia guardada.
    - Sprites e iconos: primero caché (se guardan la primera vez que se ven).
    - Firebase, Google y otros dominios: no se tocan. */
-const V = "psh-v2";
+const V = "psh-v3";
 const CORE = ["./", "index.html", "manifest.webmanifest", "icons/icon-192.png", "icons/icon-512.png"];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(V).then(c => c.addAll(CORE)).catch(() => {}));
