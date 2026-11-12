@@ -1784,6 +1784,8 @@ function xGen(x){const L=10+2*x.A,rows=[];
   for(let r=0;r<L-1;r++){const a=rows[r],b=rows[r+1],n=a.length,m=b.length,inc=new Array(m).fill(0);
     a.forEach((o,j)=>{const b0=Math.min(m-1,Math.max(0,Math.round((j+.5)/n*m-.5))),c=new Set([b0]);if(m>1&&Math.random()<.45){const s=b0+(Math.random()<.5?-1:1);if(s>=0&&s<m)c.add(s)}o.c=[...c].sort((p,q)=>p-q);o.c.forEach(i=>inc[i]++)});
     inc.forEach((v,i)=>{if(!v){const j=Math.min(n-1,Math.max(0,Math.round((i+.5)/m*n-.5)));a[j].c=[...new Set([...a[j].c,i])].sort((p,q)=>p-q)}})}
+  for(let r=1;r<L-2;r++)rows[r].forEach((o,j)=>{if(o.t==="w"||o.t==="rt")return;const par=rows[r-1].filter(q=>q.c.includes(j)).map(q=>q.t),kid=r+1<=L-2?rows[r+1].filter((_,i)=>o.c.includes(i)).map(q=>q.t):[];if(!par.includes(o.t)&&!kid.includes(o.t))return;
+    const bad=new Set([...par,...kid].filter(t=>t!=="w"));const t=wpick(Object.keys(NTW).filter(k=>!bad.has(k)&&k!=="rt"&&!(k==="hp"&&r<L/3)&&!(x.z===DZ&&k==="tr")),k=>NTW[k]);o.t=t;if(t==="w"){o.tier=xTier(x,r,L);o.w=xWild(x,o.tier)}});
   return rows}
 /* ---- eventos ---- */
 const xHurt=(x,pc)=>{const d=Math.max(1,Math.round(x.hpM*pc));x.hp=Math.max(0,x.hp-d);return`Pierdes ${d} PS.`},xHeal=(x,pc)=>{const h=Math.min(x.hpM-x.hp,Math.round(x.hpM*pc));x.hp+=h;return`Recuperas ${h} PS.`};
