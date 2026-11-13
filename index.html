@@ -441,7 +441,7 @@ body.paused *{animation-play-state:paused!important}
 </style><script data-goatcounter="https://pokeshinyhunter.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
 </head><body><div class="orbs"><i></i><i></i><i></i></div><div class="spot" id="spot"></div><main><div id="dex">
-<header class="top"><img id="mascot" alt="" title="¡Tócame!"><h1><span>POKE</span><b>SHINY HUNTER</b><i class="ver">v6.0.5</i></h1><div class="tzone" id="tzone"></div></header>
+<header class="top"><img id="mascot" alt="" title="¡Tócame!"><h1><span>POKE</span><b>SHINY HUNTER</b><i class="ver">v6.0.6</i></h1><div class="tzone" id="tzone"></div></header>
 <div class="scr"><div class="hud" id="bar"></div><div class="xp" id="xpb"></div><div id="zsel"></div><div id="alr"></div><div class="hud" id="pasv"></div><section id="tab"></section></div>
 </div>
 </main><nav id="nav"></nav>
@@ -490,6 +490,7 @@ let S=def();try{const j=localStorage.getItem(SK);if(j)S=Object.assign(def(),JSON
 const sigOf=()=>{const o=S.ts,m=S.mt;S.ts=0;S.mt=0;const j=JSON.stringify(S);S.ts=o;S.mt=m;return j},cmt=x=>(x&&(x.mt||x.ts))||0,adv=x=>x?(x.eggs|0)+(x.sh|0)*50+(x.evos|0)*2+(x.s5|0)*5+(x.xp|0)/200:-1,cmp=(a,b)=>{const g=(a.gen|0)-(b.gen|0);if(g)return g;const d=adv(a)-adv(b);return Math.abs(d)>1e-9?d:cmt(a)-cmt(b)},hasProg=x=>(x.eggs|0)>0||(x.box||[]).length>0,bak=x=>{try{if(hasProg(x))localStorage.setItem(SK+"_bak",JSON.stringify({t:Date.now(),d:x}))}catch(e){}};if(!S.mt)S.mt=S.ts||0;let SIG=sigOf(),SHC=S.sh|0,CST=0;
 ["cal15","cal60","inc15","inc60","cha15","cha60"].forEach(k=>{if(!(S.inv[k]>0))S.inv[k]=0});S.pas=S.pas||{};S.idx=S.idx||{};S.bgu=S.bgu||0;["pb","gb","ub","mb","dis"].forEach(k=>{if(!(S.inv[k]>0))S.inv[k]=0});S.opened=S.opened||{};if(!(S.opened.dis>0))S.opened.dis=0;if(S.inv.tok>0){S.money+=S.inv.tok*5000;S.inv.tok=0}
 if(!S.mig20){S.mig20=1;if(S.lv>=5)S.inv.pb+=15}
+if(!S.mig60){S.mig60=1;if(S.pas&&S.pas.dol){S.money+=14000;delete S.pas.dol}}
 if(!S.mig50){S.mig50=1;S.drq=(S.drq|0)+(S.incu|0)*2;S.incu=0;delete S.pas.rad;delete S.pas.rads;S.wild=null}
 if(!S.mig30){S.mig30=1;["cap","zid","gaf","saf"].forEach(k=>{if(S.pas[k]){S.inv["a_"+k]=(S.inv["a_"+k]|0)+1;delete S.pas[k]}})}
 let CFG={lang:([...(navigator.languages||[]),navigator.language||""].map(l=>(l||"").toLowerCase().slice(0,2)).find(l=>["es","en","pt","fr","de","it"].includes(l))||"en"),ok:0,nosave:0,sfx:30,mus:22,calm:0,vol2:1};try{const _c=JSON.parse(localStorage.getItem("shehCfg")||"{}");if(!_c.vol2){if(_c.sfx===70||_c.sfx==null)_c.sfx=30;if(_c.mus===50||_c.mus==null)_c.mus=22;_c.vol2=1}CFG=Object.assign(CFG,_c)}catch(e){}if(!["es","en","pt","fr","de","it"].includes(CFG.lang))CFG.lang="en";
@@ -1065,7 +1066,7 @@ const xpFor=L=>Math.round(25*Math.pow(L-1,1.8)),MAXL=50,LVZ=[0,5,10,15,20,25,30,
 const capL=()=>MAXL;const ZREQ=[0,.5,.57,.64,.7,.75,.8,.84,.88];const zReq=i=>i<1||i>=DZ||wp(i-1)>=ZREQ[i];const zNeed=i=>`${Math.round(ZREQ[i]*100)} % de progreso en ${ZN[i-1]}`;
 const lvl=()=>{let l=1;const c=capL();while((l<c||(c>=MAXL&&l<100000))&&S.xp>=xpFor(l+1))l++;return l};
 const SHL={pkm:22,pb:5,gb:12,ub:22,cap:16,zid:18,gaf:30,cal15:11,inc15:15,cha15:19,cal60:21,inc60:26,cha60:34,glo:46,per:47,cal:2,rare:3,inc:6,epic:10,plu:12,cha:14,saf:16,dol:18,leg:20,ovl:28,rot:30,dia:10,wak:14,po:5,spo:12,upo:22,bay:5,sbay:12,ubay:22,ce:1};
-const UNL={2:"Encargos · Calcio",3:"Trueques · Huevos raros",5:"Expediciones · Pokéball · Poción · Baya",6:"Incienso",10:"Huevos épicos · Diario de campo",11:"Super Calcio",12:"Superball · Superpoción · Superbaya",14:"Despertador",15:"Super Incienso",18:"Pokemuñeco",21:"Ultra Calcio",22:"Ultraball · Ultrapoción · Ultrabaya · Pokemando",26:"Ultra Incienso",28:"Amuleto oval",30:"Rotom-chip"};
+const UNL={2:"Encargos · Calcio",3:"Trueques · Huevos raros",5:"Expediciones · Pokéball · Poción · Baya",6:"Incienso",10:"Huevos épicos · Diario de campo",11:"Super Calcio",12:"Superball · Superpoción · Superbaya",14:"Despertador",15:"Super Incienso",21:"Ultra Calcio",22:"Ultraball · Ultrapoción · Ultrabaya · Pokemando",26:"Ultra Incienso",28:"Amuleto oval",30:"Rotom-chip"};
 const unl=k=>k==="dis"?S.zu.includes(DZ):k==="glo"||k==="per"?!!S.nat:SHL[k]===undefined||S.lv>=SHL[k];
 function addXP(n){const c=capL();S.xp=Math.min(S.xp+Math.round(n),c>=MAXL?1e9:xpFor(c+1)-1);const L=lvl();if(L>S.lv){const o=S.lv;S.lv=L;lvUp(o,L)}chkWorlds()}
 const WC=[0,3000,10000,30000,90000,250000,700000,1800000,5000000];
@@ -2235,7 +2236,7 @@ TOTK.forEach(k=>{ITM["tt_"+k][3]=px("TOT",PXP("#c89a5a","#8a5a2a","#f0d8a8",ATC[
 const NIC={w:px("PAW",PXP("#f0e0c8","#a08060")),ev:px("EXC",PXP("#ffd23f","#c99a00")),ch:px("CHS",PXP("#e8a040","#a06020","#ffe0a0","#ffd23f")),hp:px("CRS",PXP("#ff6a8a","#c03a58")),mk:px("BAG",PXP("#3fae5a","#257a35","#c8f0c0","#ffd23f","#a07000")),us:px("BAG",PXP("#a050ff","#6a2ad0","#e8d0ff","#ffd23f","#a07000")),tr:px("RKT",PXP("#e8503a","#a02818")),rt:px("FLG",PXP("#c8a070","#8a5a2a")),bs:px("CRN",PXP("#ffd23f","#c99a00","#fff6c8","#e8503a"))};
 const NIH=t=>`<img class="nih" src="${NIC[t]}" alt="">`;
 
-const GONE=["rad","rads","inc1","inc2","inc3"];const PASS=["pkm","dol","rot","plu","ovl","glo","per","wak","trb","dia"],DROPONLY=["plu","glo","per"],XD={cap:"30 % de recuperar la bola fallida",zid:"el doble de encuentros en la guardería",gaf:"5 % de captura crítica (radio ×3)"};
+const GONE=["rad","rads","inc1","inc2","inc3","dol"];const PASS=["pkm","dol","rot","plu","ovl","glo","per","wak","trb","dia"],DROPONLY=["plu","glo","per"],XD={cap:"30 % de recuperar la bola fallida",zid:"el doble de encuentros en la guardería",gaf:"5 % de captura crítica (radio ×3)"};
 const pgs=k=>k==="rad"?` · 🎲 ${Math.round(RP*100)} %${radR()?" · ¡Activo en el próximo huevo!":""}`:k==="rads"?` · 🎲 ${Math.round(GP*100)} %${gemR()?" · ¡Activo en el próximo huevo!":""}`:"",idesc=k=>ITM[k][2]+(ROT()&&XD[k]?" · "+XD[k]:""),tierOf=k=>/^inc\d$/.test(k)?+k.slice(3):0;
 const CONSUM=["pb","gb","ub","mb","cal","cal15","cal60","inc","inc15","inc60","cha","cha15","cha60","po","spo","upo","mpo","bay","sbay","ubay","hum","rev"],BGC=[120,360,1000,2400,6000,14000,32000,70000,160000,400000];
 const bagCap=()=>15+5*(S.bgu||0)+5*nOwn("sas"),xCap=()=>XCAP0+nOwn("sas")+(S.pas.trb?1:0),ballTot=()=>BK.reduce((a,k)=>a+(S.inv[k]||0),0);
@@ -2994,7 +2995,7 @@ setInterval(alrUpd,1500);
 
 shinyFx=epW(shinyFx,()=>10);epicWild=epW(epicWild,w=>w.al?13:w.s?10:11);evoFx=epW(evoFx,(a,b,sh)=>sh?10:12);roulFx=epW(roulFx,(a,t,r,sh)=>sh?10:12);
 /* ---------- v1.0 · cuentas, ficha de entrenador, rankings y amigos ---------- */
-const VER="v6.0.5";
+const VER="v6.0.6";
 const FBCFG={apiKey:"AIzaSyAyck2RhT-jxKhF-NYbzLB6UjLwPLLc090",authDomain:"poke-shiny-hunter-b97b0.firebaseapp.com",projectId:"poke-shiny-hunter-b97b0",storageBucket:"poke-shiny-hunter-b97b0.firebasestorage.app",messagingSenderId:"263462194560",appId:"1:263462194560:web:3ddd7235c9fa1839594565"};
 const ON=!!(FBCFG.apiKey||window.__ON);
 const UMAIL=l=>l+"@players.pokeshinyhunter.app",UOK=/^[a-z0-9_]{3,16}$/;
