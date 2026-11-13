@@ -436,6 +436,7 @@ body.paused *{animation-play-state:paused!important}
 .xpr{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;align-items:center}.xpr button{padding:5px 8px;font-size:9px;margin:0}.xpr b{margin:0 4px 0 10px}
 .xprep .mcinfo{margin:0;min-height:0}.xphelp{text-align:left}.xphelp summary{cursor:pointer}
 .xpf{position:sticky;bottom:0;margin-top:auto;background:inherit;padding:6px 0 10px;display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:0 -8px 12px -8px #0003}.xpf button{font-size:13px;padding:10px 26px}
+.wkc>div:first-child{flex:1;min-width:0}.wkb{margin:4px 0 2px;height:7px}
 </style><script data-goatcounter="https://pokeshinyhunter.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
 </head><body><div class="orbs"><i></i><i></i><i></i></div><div class="spot" id="spot"></div><main><div id="dex">
@@ -1841,6 +1842,7 @@ function xGen(x){const L=10+2*x.A,rows=[];
     inc.forEach((v,i)=>{if(!v){const j=Math.min(n-1,Math.max(0,Math.round((i+.5)/m*n-.5)));a[j].c=[...new Set([...a[j].c,i])].sort((p,q)=>p-q)}})}
   for(let r=1;r<L-2;r++)rows[r].forEach((o,j)=>{if(o.t==="w"||o.t==="rt")return;const par=rows[r-1].filter(q=>q.c.includes(j)).map(q=>q.t),kid=r+1<=L-2?rows[r+1].filter((_,i)=>o.c.includes(i)).map(q=>q.t):[];if(!par.includes(o.t)&&!kid.includes(o.t))return;
     const bad=new Set([...par,...kid].filter(t=>t!=="w"));const t=wpick(Object.keys(NTW).filter(k=>!bad.has(k)&&k!=="rt"&&!(k==="hp"&&r<L/3)&&!(x.z===DZ&&k==="tr")),k=>NTW[k]);o.t=t;if(t==="w"){o.tier=xTier(x,r,L);o.w=xWild(x,o.tier)}});
+  rows.forEach(row=>row.forEach(o=>{if(x.z===DZ&&o.t==="tr")o.t="mk";if(x.ul&&(o.t==="tr"||o.t==="mk"))o.t="us";if(x.ul&&o.t==="rt")o.t="ev"}));
   return rows}
 /* ---- eventos ---- */
 const xHurt=(x,pc)=>{const d=Math.max(1,Math.round(x.hpM*pc));x.hp=Math.max(0,x.hp-d);return`Pierdes ${d} PS.`},xHeal=(x,pc)=>{const h=Math.min(x.hpM-x.hp,Math.round(x.hpM*pc));x.hp+=h;return`Recuperas ${h} PS.`};
@@ -1902,7 +1904,7 @@ function xPrepAdd(i){const P=XPREP;if(!P||!P.bag[i])return;const k=P.bag[i][0],m
 function xPrepRem(i){const P=XPREP;if(!P)return;const t=mcStacks(P.sk)[i];if(!t)return;const n=Math.min(t[1],P.m||1);P.sk[t[0]]-=n;xPrepUi()}
 function xPrepB(k,d){const P=XPREP;if(!P)return;P.sk[k]=Math.max(0,Math.min(S.inv[k]||0,(P.sk[k]||0)+d));xPrepUi()}
 function xPrepM(d){const P=XPREP;if(!P)return;P.mo=Math.max(0,Math.min(S.money,P.mo+d));xPrepUi()}
-function xGo0(){const P=XPREP;if(!P||S.exp)return;const e=xFindU(P.u);if(!e)return;if(S.zone===DZ){if(!(S.inv.psd>0))return toast("Necesitas un Pase distorsión");S.inv.psd--}const nb=BK.reduce((a,k)=>a+(P.sk[k]||0),0);if(nb<5||xSlots({sk:P.sk})>xCap())return;
+function xGo0(){const P=XPREP;if(!P||S.exp)return;jFull();const e=xFindU(P.u);if(!e)return;if(S.zone===DZ){if(!(S.inv.psd>0))return toast("Necesitas un Pase distorsión");S.inv.psd--}const nb=BK.reduce((a,k)=>a+(P.sk[k]||0),0);if(nb<5||xSlots({sk:P.sk})>xCap())return;
   Object.keys(P.sk).forEach(k=>{const n=Math.min(P.sk[k]||0,S.inv[k]||0);P.sk[k]=n;S.inv[k]=(S.inv[k]||0)-n});const mo=Math.min(P.mo,S.money);S.money-=mo;XPREP=null;closeModal();if(isMy(e))S.mbox=S.mbox.filter(x=>x.u!==e.u);else take(e);
   const tot=P.tot&&S.inv["tt_"+P.tot]>0?P.tot:"";if(tot)S.inv["tt_"+tot]--;const pkr=hasAt(e,"pk")||tot==="pk",sup=pkr||((hasAt(e,"il")||tot==="il")&&Math.random()<.2),hp=xHpM(e,tot);const ul=sup&&S.zu.includes(4)&&S.zone!==DZ?1:0;const x={v:2,tot,ul,z:S.zone,my:e,sup:sup?1:0,A:advL(S.zone),r:-1,c:-1,done:1,hp,hpM:hp,bag:[],sk:Object.assign({},P.sk),mo,mo0:mo,cap:xCap(),log:[],sp:{},fl:0,fx:{}};
   x.map=xGen(x);S.exp=x;S.cdE=0;save();head();expTab();if(pkr)toast(ul?"¡Pokérus! Viajas a la Megadimensión":"¡Pokérus! Esta expedición es una Super expedición");else if(hasAt(e,"il")||tot==="il")ilRoulette(!!x.sup)}
@@ -2411,7 +2413,7 @@ setInterval(()=>{if((S.drops>0||S.dcur)&&!DR&&!busy&&!opening&&!$("#dm").classLi
 
 /* ---------- progreso de mundo y logros de mundo ---------- */
 const WRANK=["Leyenda de la Ciudad","Guardián del Bosque","Señor de las Cavernas","Lobo de Mar","Rey del Pantano","Nómada del Desierto","Domador de Lava","Rey de la Cumbre","Alma Tropical","Viajero Dimensional"];
-const WK=[["dex","Registra todos los Pokémon de esta zona",z=>D.sp.filter(m=>m.z===z).length,2],["main","Completa el encargo principal",()=>1,1],["q","Completa encargos aquí",()=>10,1],["x","Termina expediciones aquí",()=>4,1],["e","Abre huevos aquí",()=>150,1],["s","Consigue un shiny de esta zona",()=>1,2],["g","Construye y mejora la guardería de esta zona",()=>gProgN(),1]];
+const WK=[["dex","Registra todos los Pokémon de esta zona",z=>D.sp.filter(m=>m.z===z).length,2],["main","Completa el encargo principal",()=>1,1],["q","Completa encargos aquí",()=>10,1],["x","Termina expediciones aquí",()=>4,1],["e","Abre huevos aquí",()=>150,1],["s","Consigue un shiny de esta zona",()=>1,2],["g","Construye y mejora la guardería de esta zona",()=>20,1]];
 const wkProg=(z,k)=>({dex:D.sp.filter(m=>m.z===z&&S.seen[m.id]>0).length,main:S.qs&&S.qs[z]&&S.qs[z].m?1:0,q:(S.qz||{})[z]||0,x:(S.xz||{})[z]||0,e:(S.ez||{})[z]||0,s:D.sp.filter(m=>m.z===z&&S.shiny[m.id]>0).length,g:z===DZ?0:gProg(z)})[k];
 const wkList=z=>WK.filter(w=>!(z===DZ&&(w[0]==="main"||w[0]==="x"||w[0]==="g"))&&!(w[0]==="main"&&!MAIN[z]));
 const wp=z=>{const L=wkList(z),r=L.reduce((a,w)=>a+Math.min(1,wkProg(z,w[0])/w[2](z)),0)/L.length;return wkProg(z,"dex")<D.sp.filter(m=>m.z===z).length?Math.min(r,.99):r};
@@ -2433,13 +2435,13 @@ function missTab(){
   const wr=wkReady(),gr=claimable()-wr,seg=`<div class="dxseg"><button class="${missSec==="w"?"on":""}" onclick="missSec='w';missTab()">Zonas${wr?" ("+wr+")":""}</button><button class="${missSec==="g"?"on":""}" onclick="missSec='g';missTab()">Generales${gr?" ("+gr+")":""}</button></div>`;
   if(missSec==="w"){$("#tab").innerHTML=seg+S.zu.slice().sort((a,b)=>(b===S.zone)-(a===S.zone)||a-b).map(z=>{const done=wkList(z).every(w=>(S.wach||{})[z+":"+w[0]]);
     return`<div class="box wbox${z===S.zone?" here":""}"><div class="wtl"><img src="${BGS[z]}" alt=""><div><b>${ZN[z]}</b>${done?`<br><span class="q" style="background:#e8a800">★ ${WRANK[z]}</span>`:`<br><span class="lbl">Título: ${WRANK[z]}</span>`}</div></div>${wpBar(z)}`+wkList(z).map(w=>{const p=Math.min(wkProg(z,w[0]),w[2](z)),t=w[2](z),c=(S.wach||{})[z+":"+w[0]],r=wkRw(z,w);
-      return`<div class="card wkc${c?" done":""}"><div><span>${w[1]}</span><br><span class="lbl">${p}/${t} · ₽${fmt(r.money)} + ${r.dr} Pokédrop${r.dr>1?"s":""}</span></div>${c?"<button disabled>HECHO</button>":`<button class="g" ${p<t?"disabled":""} onclick="wkClaim(${z},'${w[0]}')">Reclamar</button>`}</div>`}).join("")+"</div>"}).join("");return}
+      return`<div class="card wkc${c?" done":""}"><div><span>${w[1]}</span><div class="hpb wkb"><i style="width:${Math.round(100*p/t)}%;background:${p>=t?"#2f9e5b":"#3f8de0"}"></i></div><span class="lbl">${p}/${t} · ₽${fmt(r.money)} + ${r.dr} Pokédrop${r.dr>1?"s":""}</span></div>${c?"<button disabled>HECHO</button>":`<button class="g" ${p<t?"disabled":""} onclick="wkClaim(${z},'${w[0]}')">Reclamar</button>`}</div>`}).join("")+"</div>"}).join("");return}
   const L=MS.map((m,i)=>({m,i,p:Math.min(prog(m[0]),m[1]),lock:S.lv<(ALV[m[0]]||0),c:S.claimed[i]})),ord=x=>x.c?3:x.lock?2:x.p>=x.m[1]?0:1;
   L.sort((a,b)=>ord(a)-ord(b)||a.i-b.i);
   $("#tab").innerHTML=seg+L.map(x=>{const[k,n,r]=x.m;
     if(x.lock)return`<div class="card" style="opacity:.6"><div>???<br><span class="lbl">Se desbloquea al subir de nivel</span></div><button disabled>???</button></div>`;
     if(x.c)return`<div class="card" style="opacity:.5;padding:5px 10px"><div class="lbl">${trS(MT[k]).replace("{n}",n)}</div><button disabled>HECHO</button></div>`;
-    return`<div class="card"><div>${trS(MT[k]).replace("{n}",n)}<br><span class="lbl">${x.p}/${n} · ${(w=>"₽"+fmt(w.money)+(w.dr?" + "+w.dr+" Pokédrop"+(w.dr>1?"s":""):"")+" + "+w.xp+" XP")(msRw(r))}</span></div><button class="g" ${x.p<n?"disabled":""} onclick="claim(${x.i})">Reclamar</button></div>`}).join("")}
+    return`<div class="card wkc"><div>${trS(MT[k]).replace("{n}",n)}<div class="hpb wkb"><i style="width:${Math.round(100*x.p/n)}%;background:${x.p>=n?"#2f9e5b":"#3f8de0"}"></i></div><span class="lbl">${x.p}/${n} · ${(w=>"₽"+fmt(w.money)+(w.dr?" + "+w.dr+" Pokédrop"+(w.dr>1?"s":""):"")+" + "+w.xp+" XP")(msRw(r))}</span></div><button class="g" ${x.p<n?"disabled":""} onclick="claim(${x.i})">Reclamar</button></div>`}).join("")}
 function claim(i){const[k,n,r]=MS[i];if(S.claimed[i]||prog(k)<n)return;S.claimed[i]=1;const w=msRw(r);S.money+=w.money;S.drops+=w.dr;snd(D.snd.pew);addXP(w.xp);save();head();missTab()}
 let dexMode="mon",dexN=60;
 const ITX={ce:["Huevo común","El huevo básico de Ditto: se recoge en la guardería y se abre en la pestaña Huevos",()=>EGGI.n[0],"Guardería"],drop:["Pokédrop","Una bola que se abre a toques y guarda recompensas misteriosas",()=>BALLI[0],"Encargos y Pokéjuegos"],stone:["Piedra brillante","Permite evolucionar a 1 shiny (pestaña Shiny)",()=>LS+"items/shiny-stone.png","Pokédrop"],tok:["Ficha distorsión","Abre una zona especial durante 5 minutos",()=>ICO.gem,"Encargos y Pokédrop"]};
