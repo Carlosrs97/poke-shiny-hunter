@@ -416,6 +416,7 @@ body.paused *{animation-play-state:paused!important}
 .tnd.lk{opacity:.55;filter:grayscale(.6);border-style:dashed}.tnd.av{border-color:#3f8de0}.tnd.go{border-color:#8e5be0}.tnd.mx{border-color:#2f9e5b;background:#e3f6e8}
 .tnd.fin{max-width:240px;border-color:#e8a800}.tnd.fin.mx{background:#fff3cc}
 .mcinfo{border:1px dashed #0003;border-radius:8px;padding:6px 8px;margin:6px 0;min-height:30px;text-align:left}.mcinfo.on{border-style:solid;border-color:#3f8de0;background:#3f8de014}.mcs{-webkit-touch-callout:none;user-select:none}
+#nur.ngr{background-position:center;background-size:cover}#nur img.nbl{width:17%;max-width:84px;z-index:1;cursor:pointer;filter:drop-shadow(0 2px 0 #0005);animation:nbin .5s ease-out}#nur img.nbl:hover{filter:drop-shadow(0 0 4px #fff) drop-shadow(0 2px 0 #0005)}#nur img.npk{animation:npk 1.2s infinite}@keyframes npk{50%{transform:translateY(-4px)}}@keyframes nbin{from{transform:scale(.3);opacity:0}}#nur .ne,#nur #nd,#nur #nw{z-index:2}
 </style><script data-goatcounter="https://pokeshinyhunter.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
 </head><body><div class="orbs"><i></i><i></i><i></i></div><div class="spot" id="spot"></div><main><div id="dex">
@@ -2834,8 +2835,45 @@ const NBG={};
 function nurBg(zn){if(NBG[zn])return NBG[zn];return NBG[zn]=mkScene(PERM[zn],256,160,true);const c=document.createElement("canvas");c.width=128;c.height=80;const g=c.getContext("2d"),P=NPAL[zn],gr=g.createLinearGradient(0,0,0,44);gr.addColorStop(0,P[0]);gr.addColorStop(1,P[1]);g.fillStyle=gr;g.fillRect(0,0,128,44);g.fillStyle=P[2];g.fillRect(0,44,128,36);
   let s=zn*977+13;const R=()=>(s=(s*16807)%2147483647)/2147483647;g.fillStyle=P[3];for(let i=0;i<70;i++)g.fillRect(R()*128|0,46+R()*32|0,2,1);
   NDEC[zn]((x,y,w,h,col)=>{g.fillStyle=col;g.fillRect(x,y,w,h)},R);return NBG[zn]=c.toDataURL()}
-const nPos=i=>[8+(i*37%80),60+(i*53%26)];
-function nurHtml(){return `<div id="nur" class="${S.wild&&S.wild.z===S.zone?"hw":""}" style="background-image:url(${nurBg(S.zone)})"><img id="nd" data-id="132" alt="Ditto" src="${gif(132)}" style="left:40%;top:66%" onclick="ditTap('#nd')"><div id="nmsg"></div><div id="nurl"></div><div id="nal"></div></div>`}
+const nPos=i=>[8+(i*37%80),66+(i*53%24)];
+/* ---------- guardería: suelo de la zona y edificios temáticos ---------- */
+const NTH=[ // suelo [base,claro,oscuro,detalle] · edificio [pared,pared sombra,tejado,tejado sombra,acento]
+ {g:["#9aa0ac","#b4bac6","#7e8492","#c8ccd6"],b:["#d8dce6","#aab0c0","#3f6fd0","#2a4c98","#ffd23f"],k:"city"},
+ {g:["#5fae4a","#78c45e","#46903a","#ff9ad0"],b:["#b07a48","#8a5a30","#3f8a3a","#2a6a2a","#ffd23f"],k:"forest"},
+ {g:["#5a5268","#6c6480","#443e52","#8a82a0"],b:["#7a7488","#5a5468","#3a3448","#26222f","#8ad0ff"],k:"cave"},
+ {g:["#ead9a0","#f6e8b8","#d2bd80","#ffffff"],b:["#f4f4f0","#cfd0cc","#3fb8c8","#2a8a98","#ff8a5a"],k:"beach"},
+ {g:["#5a6a3a","#6e7e48","#46562c","#7a5a9a"],b:["#5a4630","#3e2f20","#6a4a9a","#4a2f78","#b0ff8a"],k:"swamp"},
+ {g:["#e8c070","#f4d48c","#d2a650","#c08a40"],b:["#e6c48c","#c49a60","#c8643a","#9a4422","#3fb8c8"],k:"desert"},
+ {g:["#3a2a2a","#4a3434","#2a1c1c","#ff6a2a"],b:["#4a3a3a","#2e2222","#c8321e","#8a1e12","#ffb02a"],k:"volcano"},
+ {g:["#eef4fb","#ffffff","#cfdcec","#9ab8dc"],b:["#a8784a","#7e5634","#f4f8ff","#c8d6ea","#e8503a"],k:"snow"},
+ {g:["#f0e0a8","#fbefc4","#d8c488","#5fbe5a"],b:["#d8b878","#b08e50","#6aa83a","#4a7e26","#ff6aa8"],k:"island"}];
+const NGB={};
+function mkGround(z){if(NGB[z])return NGB[z];const W=160,H=100,c=document.createElement("canvas");c.width=W;c.height=H;const g=c.getContext("2d"),T=NTH[z]||NTH[1],[b,l,d,x]=T.g;let sd=z*977+31;const R=()=>(sd=(sd*16807)%2147483647)/2147483647,p=(X,Y,col,w=1,h=1)=>{g.fillStyle=col;g.fillRect(X|0,Y|0,w,h)};
+ p(0,0,b,W,H);for(let i=0;i<W*H*.22;i++)p(R()*W,R()*H,R()<.5?l:d);
+ const k=T.k;
+ if(k==="city"){for(let y=0;y<H;y+=10)for(let X=(y/10%2)*10;X<W;X+=20){p(X,y,l,19,9);p(X,y+9,d,20,1);p(X+19,y,d,1,10)}for(let i=0;i<6;i++){const X=R()*W,Y=R()*H;p(X,Y,"#6cc35a",3,2);p(X+1,Y-1,"#4f9e45")}}
+ if(k==="forest"||k==="swamp"||k==="island"){for(let i=0;i<140;i++){const X=R()*W,Y=R()*H;p(X,Y,d);p(X,Y-1,d);p(X+1,Y-2,l)}for(let i=0;i<(k==="forest"?40:10);i++){const X=R()*W,Y=R()*H;p(X,Y,x);p(X-1,Y,x);p(X+1,Y,x);p(X,Y-1,x);p(X,Y,"#fff6a0")}}
+ if(k==="swamp"){for(let i=0;i<7;i++){const X=R()*W,Y=R()*H,w=8+R()*14;p(X,Y,"#3a4a5a",w,4);p(X+2,Y-1,"#3a4a5a",w-4,6);p(X+3,Y,"#5a7a8a",3,1)}}
+ if(k==="island"){for(let i=0;i<5;i++){const X=R()*W,Y=R()*H;for(let j=0;j<30;j++)p(X+R()*16-8,Y+R()*8-4,"#7ad070")}}
+ if(k==="cave"){for(let i=0;i<60;i++){const X=R()*W,Y=R()*H,s=1+R()*3;p(X,Y,d,s,s);p(X,Y,l,1,1)}for(let i=0;i<6;i++){const X=R()*W,Y=R()*H;p(X,Y,x,2,3);p(X,Y,"#c8f0ff")}}
+ if(k==="beach"||k==="desert"){for(let y=4;y<H;y+=7)for(let X=0;X<W;X++){const yy=y+Math.sin(X*.15+y)*1.5;if(R()<.7)p(X,yy,d)}if(k==="beach"){for(let i=0;i<10;i++){const X=R()*W,Y=R()*H;p(X,Y,x,2,1);p(X,Y+1,"#ffb0a0")}}else for(let i=0;i<8;i++){const X=R()*W,Y=R()*H;p(X,Y,"#8a6a40",2,2)}}
+ if(k==="volcano"){for(let i=0;i<9;i++){let X=R()*W,Y=R()*H;for(let j=0;j<14;j++){p(X,Y,x);X+=R()*2-.5;Y+=R()*2-1}}for(let i=0;i<40;i++)p(R()*W,R()*H,"#5a4444",2,1)}
+ if(k==="snow"){for(let i=0;i<80;i++)p(R()*W,R()*H,"#ffffff",2,1);for(let i=0;i<20;i++)p(R()*W,R()*H,x)}
+ const v=g.createRadialGradient(W/2,H/2,H*.3,W/2,H/2,H*.95);v.addColorStop(0,"#0000");v.addColorStop(1,"#0006");g.fillStyle=v;g.fillRect(0,0,W,H);
+ return NGB[z]=c.toDataURL()}
+const NBS={};
+function bldSpr(k,z){const key=k+z;if(NBS[key])return NBS[key];const S2=32,c=document.createElement("canvas");c.width=c.height=S2;const g=c.getContext("2d"),T=NTH[z]||NTH[1],[wa,ws,rf,rs,ac]=T.b,O="#14183a";
+ const p=(x,y,col,w=1,h=1)=>{g.fillStyle=col;g.fillRect(x,y,w,h)},box=(x,y,w,h,f,s)=>{p(x,y,O,w,h);p(x+1,y+1,f,w-2,h-2);p(x+w-3,y+1,s,2,h-2)},
+ roof=(x,y,w,h)=>{for(let i=0;i<h;i++){const ww=Math.max(2,Math.round(w*(i+1)/h));const xx=x+Math.round((w-ww)/2);p(xx-1,y+i,O,ww+2,1);p(xx,y+i,i%2?rf:rs,ww,1)}};
+ if(k==="nid"){const rows=[[9,14],[7,18],[6,20],[6,20],[7,18],[9,14]];rows.forEach(([x,w],i)=>{p(x-1,21+i,O,w+2,1);p(x,21+i,i<2?"#d8a860":"#b88a4a",w,1)});for(let i=0;i<7;i++)p(8+i*2,23+(i%2),"#8a6230",2,1);const egg=(x,y,c)=>{p(x+1,y,O,3,1);p(x,y+1,O,5,5);p(x+1,y+6,O,3,1);p(x+1,y+1,c,3,5);p(x+1,y+2,"#ffffff",1,2)};egg(10,15,"#fff7de");egg(16,14,"#fff1c8");egg(13,17,"#fff7de");p(7,27,"#0004",18,2)}
+ if(k==="hie"){const gc=T.k==="desert"?["#d8b058","#a07c30","#f0d080"]:T.k==="volcano"?["#7a6a5a","#4a3a2e","#9a8a7a"]:T.k==="snow"?["#8ac0a0","#5a9070","#e8f4ff"]:["#4fb04a","#2a7a2a","#8ae070"];[[4,12],[8,17],[12,13],[16,19],[20,14],[24,11]].forEach(([x,h],i)=>{for(let j=0;j<h;j++){const dx=Math.round(Math.sin((j/h)*1.4+i)*1.5);p(x+dx-1,29-j,O,4,1);p(x+dx,29-j,j>h-3?gc[2]:j%3?gc[0]:gc[1],2,1)}});p(3,29,O,26,2);p(4,28,gc[1],24,1)}
+ if(k==="sas"){roof(4,6,24,8);box(5,13,22,15,wa,ws);for(let i=0;i<11;i++)p(5+i*2,13,i%2?ac:"#ffffff",2,3);p(13,20,O,6,8);p(14,21,"#6a4224",4,7);p(21,17,O,4,4);p(22,18,"#ffe8f0",2,2);p(7,17,O,4,4);p(8,18,"#bfe8ff",2,2)}
+ if(k==="lab"){box(3,14,26,14,"#f4f8fc","#c8d4e2");for(let i=0;i<5;i++){p(13-i,9+i,O,6+i*2,1);p(14-i,9+i,i<1?"#ffffff":"#bfe8ff",4+i*2,1)}p(15,7,O,2,2);p(6,18,O,5,5);p(7,19,"#bfe8ff",3,3);p(21,18,O,5,5);p(22,19,"#bfe8ff",3,3);p(13,20,O,6,8);p(14,21,rf,4,7);p(15,22,ac,2,2)}
+ if(k==="tor"){box(10,9,12,20,wa,ws);roof(8,1,16,9);for(let y=12;y<26;y+=5){p(14,y,O,4,3);p(15,y+1,ac,2,1)}p(15,25,O,2,4);p(15,0,O,1,3);p(16,0,ac,3,2)}
+ return NBS[key]=c.toDataURL()}
+const NBP={nid:[14,44],hie:[33,40],sas:[52,38],lab:[71,40],tor:[89,44]};
+function nurBlds(){const z=S.zone;return Object.keys(NBP).filter(k=>bOwn(z,k)).map(k=>{const [x,y]=NBP[k],pk=k==="hie"&&S.pk&&S.pk[z]&&S.pk[z].n>0;return`<img class="nbl${pk?" npk":""}" data-k="${k}" src="${bldSpr(k,z)}" alt="${k==="tor"?TORN[z]:BLD[k][0]}" title="${k==="tor"?TORN[z]:BLD[k][0]}" style="left:${x}%;top:${y}%" onclick="bOpen('${k}')">`}).join("")}
+function nurHtml(){return `<div id="nur" class="ngr${S.wild&&S.wild.z===S.zone?" hw":""}" style="background-image:url(${mkGround(S.zone)})">${nurBlds()}<img id="nd" data-id="132" alt="Ditto" src="${gif(132)}" style="left:40%;top:72%" onclick="ditTap('#nd')"><div id="nmsg"></div><div id="nurl"></div><div id="nal"></div></div>`}
 const nurBerry=()=>{const l=["bay","sbay","ubay"].filter(k=>S.inv[k]>0);return l.length?`<div class="box"><b>Dar bayas a Ditto</b><div class="row">${l.map(k=>`<button class="g" onclick="feedB('${k}')"><img data-h src="${ITM[k][3]}" style="height:18px;vertical-align:middle"> ${ITM[k][0]} ×${S.inv[k]} · +${({bay:3,sbay:6,ubay:12})[k]} huevos</button>`).join("")}</div></div>`:""};
 function nurTab(){ceTick();if(S.zone===DZ){$("#tab").innerHTML=`<div class="box">${mc(132)}<b>Guardería cerrada</b><br><span class="lbl">Ditto se niega a cruzar al Mundo Distorsión. Aquí no hay guardería: consigue Huevos distorsión en la Tienda o en Pokédrops buenos. Tu guardería sigue funcionando en las demás zonas.</span></div>`;return}$("#tab").innerHTML=`<div class="box">${mc(132)}<b>Guardería de ${ZN[S.zone]}</b><br><span class="lbl">Ditto pasea y deja huevos por el suelo. Tócalos para recogerlos y ábrelos en la pestaña Huevos.</span></div>${nurHtml()}<div class="box"><div class="lbl" id="cetl"></div><div class="row"><button class="g" id="ngo" onclick="go('egg')">Ir a abrir huevos (${on("cha")?"∞":S.cc})</button>${S.pas.rot?`<button class="w" id="nrot" onclick="nurAll()">Rotom: recoger todos los huevos</button>`:""}</div></div>${nurBerry()}${bldHtml()}`;setTimeout(()=>tutShow("bld"),50);cetUi();nurSync();if(S.wild&&S.wild.z===S.zone)setTimeout(nurAlert,350)}
 function nurEggs(){const a=[];["rare","epic","leg"].forEach(k=>{for(let i=0;i<(S.ist?S.ist[k]:0);i++)a.push(k)});for(let i=0;i<S.ce;i++)a.push("n");return a.slice(0,16)}
