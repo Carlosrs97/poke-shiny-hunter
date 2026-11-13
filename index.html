@@ -441,7 +441,7 @@ body.paused *{animation-play-state:paused!important}
 </style><script data-goatcounter="https://pokeshinyhunter.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
 </head><body><div class="orbs"><i></i><i></i><i></i></div><div class="spot" id="spot"></div><main><div id="dex">
-<header class="top"><img id="mascot" alt="" title="¡Tócame!"><h1><span>POKE</span><b>SHINY HUNTER</b><i class="ver">v6.0.6</i></h1><div class="tzone" id="tzone"></div></header>
+<header class="top"><img id="mascot" alt="" title="¡Tócame!"><h1><span>POKE</span><b>SHINY HUNTER</b><i class="ver">v6.0.7</i></h1><div class="tzone" id="tzone"></div></header>
 <div class="scr"><div class="hud" id="bar"></div><div class="xp" id="xpb"></div><div id="zsel"></div><div id="alr"></div><div class="hud" id="pasv"></div><section id="tab"></section></div>
 </div>
 </main><nav id="nav"></nav>
@@ -1134,7 +1134,7 @@ function tvScene(k,a){const g=id=>typeof id==="string"?(ICO[id.slice(4)]||""):gi
 function tvHtml(t){const l=TV[t],i=tvI[t]||0,[k,a,tx]=l[i],last=i===l.length-1;
  return `<div class="box tut" id="tut"><b>Tutorial · ${i+1}/${l.length}</b>${tvScene(k,a)}<div class="tvt">${tx}</div><div class="row">${i?`<button onclick="tvGo('${t}',-1)">‹ Atrás</button>`:""}${last?`<button class="g" onclick="tutOk('${t}')">Entendido</button>`:`<button class="g" onclick="tvGo('${t}',1)">Siguiente ›</button>`}<button onclick="tutOk('${t}')">Saltar</button></div></div>`}
 function tvGo(t,d){tvI[t]=Math.max(0,Math.min(TV[t].length-1,(tvI[t]||0)+d));const e=$("#tut");if(e)e.outerHTML=tvHtml(t)}
-function tutShow(t){if(!S.tut[t]&&!document.querySelector("#tut")){if(!idle()){tutPend=t;return}if(TV[t])$("#tab").insertAdjacentHTML("afterbegin",tvHtml(t));else if(TUT[t])$("#tab").insertAdjacentHTML("afterbegin",`<div class="box tut" id="tut"><b>Tutorial</b><br>${TUT[t]}<div class="row"><button class="g" onclick="tutOk('${t}')">Entendido</button></div></div>`)}}
+function tutShow(t){if(!S.tut[t]&&!document.querySelector("#tut")&&!document.querySelector("#tour")){if(!idle()){tutPend=t;return}if(TV[t])$("#tab").insertAdjacentHTML("afterbegin",tvHtml(t));else if(TUT[t])$("#tab").insertAdjacentHTML("afterbegin",`<div class="box tut" id="tut"><b>Tutorial</b><br>${TUT[t]}<div class="row"><button class="g" onclick="tutOk('${t}')">Entendido</button></div></div>`)}}
 const OLDV43={"79":98,"80":434,"90":28,"91":112,"95":105,"96":24,"97":105,"108":98,"120":22,"121":84,"124":98,"125":360,"138":91,"139":392,"163":22,"164":98,"194":22,"195":91,"199":392,"200":25,"201":220,"204":25,"205":91,"208":420,"211":44,"222":55,"223":28,"224":112,"225":55,"227":748,"234":24,"238":24,"239":95,"241":176,"296":25,"297":91,"299":28,"302":209,"303":187,"311":44,"312":44,"316":28,"317":112,"320":28,"321":112,"324":44,"336":198,"343":22,"344":98,"353":119,"354":476,"366":28,"367":112,"368":105,"417":42,"425":112,"426":434,"429":105,"434":22,"435":84,"441":44,"453":126,"454":518,"455":165,"459":105,"460":392,"463":392,"466":1600,"476":112,"513":28,"514":105,"527":22,"528":98,"529":28,"530":112,"531":143,"538":176,"539":154,"556":37,"564":98,"565":448,"568":25,"569":91,"577":65,"578":290,"579":1200,"592":112,"593":434,"602":70,"603":310,"604":1300,"615":35,"618":42,"619":105,"620":462,"631":154,"676":44,"701":770,"702":44,"703":176,"707":176,"710":28,"711":112,"714":28,"715":112,"746":44,"771":44,"775":44,"777":44,"779":44,"780":770,"845":176,"850":112,"851":476,"856":95,"857":370,"858":1500,"870":176,"871":44,"874":176,"875":176,"876":176,"877":44,"881":176,"882":176,"883":176,"899":95,"931":44,"944":112,"945":476,"948":112,"949":476,"950":44,"951":112,"952":476,"962":176,"967":176,"968":44,"969":441,"970":1890,"971":112,"972":476,"973":44,"976":176,"10105":28,"10106":112,"10180":44,"10229":112,"10230":476,"10250":44,"10251":176,"10252":176},OLDV44={"453":126,"454":518,"607":24,"608":96,"609":390},OLDV45={"213":143,"594":143};
 function bal43(OV){OV=OV||OLDV43;const l=[...(S.box||[]),...(S.shbox||[])].filter(e=>OV[e.id]!==undefined);if(!l.length)return null;const nv=l.map(val),keep={};l.forEach(e=>{keep[e.id]=BY[e.id].v});l.forEach(e=>{BY[e.id].v=OV[e.id]});const ov=l.map(val);Object.keys(keep).forEach(id=>BY[id].v=keep[id]);
  const by={};l.forEach((e,i)=>{const k=e.id+(e.s?"s":"");const o=by[k]=by[k]||{id:e.id,s:e.s,n:0,d:0};o.n++;o.d+=nv[i]-ov[i]});const rows=Object.values(by).sort((a,b)=>Math.abs(b.d)-Math.abs(a.d));
@@ -2995,7 +2995,7 @@ setInterval(alrUpd,1500);
 
 shinyFx=epW(shinyFx,()=>10);epicWild=epW(epicWild,w=>w.al?13:w.s?10:11);evoFx=epW(evoFx,(a,b,sh)=>sh?10:12);roulFx=epW(roulFx,(a,t,r,sh)=>sh?10:12);
 /* ---------- v1.0 · cuentas, ficha de entrenador, rankings y amigos ---------- */
-const VER="v6.0.6";
+const VER="v6.0.7";
 const FBCFG={apiKey:"AIzaSyAyck2RhT-jxKhF-NYbzLB6UjLwPLLc090",authDomain:"poke-shiny-hunter-b97b0.firebaseapp.com",projectId:"poke-shiny-hunter-b97b0",storageBucket:"poke-shiny-hunter-b97b0.firebasestorage.app",messagingSenderId:"263462194560",appId:"1:263462194560:web:3ddd7235c9fa1839594565"};
 const ON=!!(FBCFG.apiKey||window.__ON);
 const UMAIL=l=>l+"@players.pokeshinyhunter.app",UOK=/^[a-z0-9_]{3,16}$/;
@@ -3203,12 +3203,12 @@ const INTRO=[["egg",[133],"¡Bienvenido, cazador!","Abre huevos pulsándolos var
 ["shiny",[25],"¡A cazar shinies!","Pulsa el huevo de la pestaña Huevos y empieza. Puedes volver a ver estos consejos en cada apartado cuando lo desbloquees."]];
 let tI=0;
 function tourHtml(){const[k,a,h,tx]=INTRO[tI],last=tI===INTRO.length-1;return`<div class="box tut"><b>${h} · ${tI+1}/${INTRO.length}</b>${tvScene(k,a)}<div class="tvt">${tx}</div><div class="row">${tI?`<button onclick="tourGo(-1)">‹ Atrás</button>`:""}${last?`<button class="g" onclick="tourEnd()">¡A cazar!</button>`:`<button class="g" onclick="tourGo(1)">Siguiente ›</button>`}<button onclick="tourEnd()">Saltar</button></div></div>`}
-function tourStart(){if($("#tour"))return;tI=0;const d=document.createElement("div");d.id="tour";d.className="tour-b";d.innerHTML=tourHtml();document.body.appendChild(d)}
+function tourStart(){if($("#tour"))return;document.querySelectorAll("#tut").forEach(e=>e.remove());tI=0;const d=document.createElement("div");d.id="tour";d.className="tour-b";d.innerHTML=tourHtml();document.body.appendChild(d)}
 function tourGo(d){tI=Math.max(0,Math.min(INTRO.length-1,tI+d));$("#tour").innerHTML=tourHtml()}
-function tourEnd(){S.tut.intro=1;S.tseen={};TABS.forEach(t=>{if(t[2]())S.tseen[t[0]]=1});S.tseen.trn=S.tseen.rank=1;save();const e=$("#tour");e&&e.remove()}
+function tourEnd(){S.tut.intro=1;S.tut.egg=1;S.tut.nur=1;document.querySelectorAll("#tut").forEach(e=>e.remove());S.tseen={};TABS.forEach(t=>{if(t[2]())S.tseen[t[0]]=1});S.tseen.trn=S.tseen.rank=1;save();const e=$("#tour");e&&e.remove()}
 /* aviso de apartado nuevo */
 function newTabChk(){if(!S.tseen){S.tseen={};if(S.eggs>0||S.tut.intro)TABS.forEach(t=>{if(t[2]()&&t[0]!=="trn"&&t[0]!=="rank")S.tseen[t[0]]=1});save()}
- const t=TABS.find(t=>t[2]()&&!S.tseen[t[0]]&&TNEW[t[0]]&&(TV[t[0]]||TUT[t[0]]));if(!t)return false;S.tseen[t[0]]=1;save();navr();
+ const t=TABS.find(t=>t[2]()&&!S.tseen[t[0]]&&TNEW[t[0]]&&(TV[t[0]]||TUT[t[0]]));if(!t)return false;S.tseen[t[0]]=1;S.tut[t[0]]=1;save();navr();
  notify(`<div style="font-size:12px;margin-bottom:6px">¡NUEVO APARTADO!</div><p><b>${TNEW[t[0]]}</b> ya está disponible.</p><p class="lbl">¿Quieres ver cómo funciona?</p><div class="row" style="justify-content:center"><button class="g" onclick="closeModal();S.tut['${t[0]}']=0;go('${t[0]}')">Ver tutorial</button></div>`);return true}
 /* tráiler de zona nuevo */
 function worldChk(){const nz=nextZ();if(nz>0&&nz<DZ&&zReq(nz)&&!(S.wt&&S.wt[nz])){S.wt=S.wt||{};S.wt[nz]=1;save();ANQ.push({k:"wprev",z:nz})}}
