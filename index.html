@@ -441,7 +441,7 @@ body.paused *{animation-play-state:paused!important}
 </style><script data-goatcounter="https://pokeshinyhunter.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
 </head><body><div class="orbs"><i></i><i></i><i></i></div><div class="spot" id="spot"></div><main><div id="dex">
-<header class="top"><img id="mascot" alt="" title="¡Tócame!"><h1><span>POKE</span><b>SHINY HUNTER</b><i class="ver">v6.0.9</i></h1><div class="tzone" id="tzone"></div></header>
+<header class="top"><img id="mascot" alt="" title="¡Tócame!"><h1><span>POKE</span><b>SHINY HUNTER</b><i class="ver">v6.0.10</i></h1><div class="tzone" id="tzone"></div></header>
 <div class="scr"><div class="hud" id="bar"></div><div class="xp" id="xpb"></div><div id="zsel"></div><div id="alr"></div><div class="hud" id="pasv"></div><section id="tab"></section></div>
 </div>
 </main><nav id="nav"></nav>
@@ -1846,7 +1846,14 @@ function xGen(x){const L=10+2*x.A,rows=[];
   for(let r=1;r<L-2;r++)rows[r].forEach((o,j)=>{if(o.t==="w"||o.t==="rt")return;const par=rows[r-1].filter(q=>q.c.includes(j)).map(q=>q.t),kid=r+1<=L-2?rows[r+1].filter((_,i)=>o.c.includes(i)).map(q=>q.t):[];if(!par.includes(o.t)&&!kid.includes(o.t))return;
     const bad=new Set([...par,...kid].filter(t=>t!=="w"));const t=wpick(Object.keys(NTW).filter(k=>!bad.has(k)&&k!=="rt"&&!(k==="hp"&&r<L/3)&&!(x.z===DZ&&k==="tr")),k=>NTW[k]);o.t=t;if(t==="w"){o.tier=xTier(x,r,L);o.w=xWild(x,o.tier)}});
   rows.forEach(row=>row.forEach(o=>{if(x.z===DZ&&o.t==="tr")o.t="mk";if(x.ul&&(o.t==="tr"||o.t==="mk"))o.t="us";if(x.ul&&o.t==="rt")o.t="ev"}));
-  return rows}
+  xBossFix(rows,x);return rows}
+/* el jefe siempre es el Pokémon más valioso de la expedición (sin contar el brillo shiny) */
+function xBossFix(rows,x){const bs=rows[rows.length-1]&&rows[rows.length-1][0];if(!bs||!bs.w)return;const vN=e=>val(Object.assign({},e,{s:0})),ws=rows.flat().filter(o=>o.t==="w"&&o.w),M=()=>Math.max(0,...ws.map(o=>vN(o.w))),b=bs.w;
+ if(vN(b)>M())return;b.st=5;if(vN(b)>M())return;
+ const my=MYT.some(m=>m.id===b.id);
+ if(!my){const k=(b.al?1.2:1)*atMul(b),pool=D.sp.filter(s=>(x.ul?s.z<DZ&&S.zu.includes(s.z):s.z===x.z)&&s.t>=3&&bval(s.id)*STV[4]*k>M());if(pool.length){const c=pool.sort((p,q)=>bval(p.id)-bval(q.id)).slice(0,6);b.id=pick(c).id;bs.tier=BY[b.id].t;return}
+  if(!b.al){const f=finalEvo(b.id);if(BY[f]&&BY[f].t>=3){b.id=f;b.al=1;bs.tier=BY[b.id].t;if(vN(b)>M())return}}}
+ const V=vN(b);ws.forEach(o=>{let w=o.w,n=0;while(vN(w)>=V&&n++<12){if(w.st>1&&n<4)w.st=1;else if(w.al)w.al=0;else if(w.at&&w.at.some(k=>k==="pk"||k==="gi"))w.at=w.at.filter(k=>k!=="pk"&&k!=="gi");else{const t=Math.max(0,(o.tier||BY[w.id].t)-1);o.tier=t;const s=w.s;w=xWild(x,t);w.s=s;o.w=w;o.tier=BY[w.id].t}}})}
 /* ---- eventos ---- */
 const xHurt=(x,pc)=>{const d=Math.max(1,Math.round(x.hpM*pc));x.hp=Math.max(0,x.hp-d);return`Pierdes ${d} PS.`},xHeal=(x,pc)=>{const h=Math.min(x.hpM-x.hp,Math.round(x.hpM*pc));x.hp+=h;return`Recuperas ${h} PS.`};
 const xMoney=(x,n)=>{n=Math.round(n);x.mo=Math.max(0,x.mo+n);return n>=0?`Ganas ₽${fmt(n)}.`:`Pierdes ₽${fmt(-n)}.`};
@@ -1923,7 +1930,7 @@ function xGo(r,c){const x=S.exp;if(!x||busy||!xCan(x,r,c))return;x.r=r;x.c=c;x.d
   if(o.t==="w"||o.t==="bs")x.fxE={};
   if((o.t==="w"||o.t==="bs")&&xBalls(x)<1){save();xLose("Te has quedado sin Pokéballs");return}
   if(o.t==="w"){if(x.fx.skip){x.fx.skip=0;x.done=1;save();expTab();toast("Pasas de largo sin combatir");return}
-    if(x.fx.up||x.fx.alfa||x.fx.star){const t=x.fx.alfa?Math.max(3,o.tier):x.fx.up?Math.min(3,o.tier+1):o.tier;if(t!==o.tier||x.fx.alfa){o.tier=t;o.w=xWild(x,t)}if(x.fx.alfa){const f=finalEvo(o.w.id);if(BY[f].t>=3){o.w.id=f;o.w.al=1;o.w.st=5}}if(x.fx.star&&!o.w.al)o.w.st=Math.min(5,Math.max(o.w.st,4));x.fx.up=x.fx.alfa=x.fx.star=0;o.tier=BY[o.w.id].t}x.fx.hide=0}
+    if(x.fx.up||x.fx.alfa||x.fx.star){const t=x.fx.alfa?Math.max(3,o.tier):x.fx.up?Math.min(3,o.tier+1):o.tier;if(t!==o.tier||x.fx.alfa){o.tier=t;o.w=xWild(x,t)}if(x.fx.alfa){const f=finalEvo(o.w.id);if(BY[f].t>=3){o.w.id=f;o.w.al=1;o.w.st=5}}if(x.fx.star&&!o.w.al)o.w.st=Math.min(5,Math.max(o.w.st,4));x.fx.up=x.fx.alfa=x.fx.star=0;o.tier=BY[o.w.id].t;xBossFix(x.map,x)}x.fx.hide=0}
   if(o.t==="hp"){x.hp=x.hpM;x.done=1;sfx.coin&&sfx.coin();toast("Tu Pokémon se ha curado del todo")}
   if(o.t==="ch"&&!o.loot)o.loot=xChestLoot(x,xChestTier(x));
   if(o.t==="mk"&&!o.of)o.of=xMkGen(x);if(o.t==="us"&&!o.of)o.of=xUsGen();
@@ -2997,7 +3004,7 @@ setInterval(alrUpd,1500);
 
 shinyFx=epW(shinyFx,()=>10);epicWild=epW(epicWild,w=>w.al?13:w.s?10:11);evoFx=epW(evoFx,(a,b,sh)=>sh?10:12);roulFx=epW(roulFx,(a,t,r,sh)=>sh?10:12);
 /* ---------- v1.0 · cuentas, ficha de entrenador, rankings y amigos ---------- */
-const VER="v6.0.9";
+const VER="v6.0.10";
 const FBCFG={apiKey:"AIzaSyAyck2RhT-jxKhF-NYbzLB6UjLwPLLc090",authDomain:"poke-shiny-hunter-b97b0.firebaseapp.com",projectId:"poke-shiny-hunter-b97b0",storageBucket:"poke-shiny-hunter-b97b0.firebasestorage.app",messagingSenderId:"263462194560",appId:"1:263462194560:web:3ddd7235c9fa1839594565"};
 const ON=!!(FBCFG.apiKey||window.__ON);
 const UMAIL=l=>l+"@players.pokeshinyhunter.app",UOK=/^[a-z0-9_]{3,16}$/;
