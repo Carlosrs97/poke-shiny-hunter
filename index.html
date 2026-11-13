@@ -441,7 +441,7 @@ body.paused *{animation-play-state:paused!important}
 </style><script data-goatcounter="https://pokeshinyhunter.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
 </head><body><div class="orbs"><i></i><i></i><i></i></div><div class="spot" id="spot"></div><main><div id="dex">
-<header class="top"><img id="mascot" alt="" title="¡Tócame!"><h1><span>POKE</span><b>SHINY HUNTER</b><i class="ver">v6.0.4</i></h1><div class="tzone" id="tzone"></div></header>
+<header class="top"><img id="mascot" alt="" title="¡Tócame!"><h1><span>POKE</span><b>SHINY HUNTER</b><i class="ver">v6.0.5</i></h1><div class="tzone" id="tzone"></div></header>
 <div class="scr"><div class="hud" id="bar"></div><div class="xp" id="xpb"></div><div id="zsel"></div><div id="alr"></div><div class="hud" id="pasv"></div><section id="tab"></section></div>
 </div>
 </main><nav id="nav"></nav>
@@ -1064,8 +1064,8 @@ async function annFx(a){
 const xpFor=L=>Math.round(25*Math.pow(L-1,1.8)),MAXL=50,LVZ=[0,5,10,15,20,25,30,35,40,45];
 const capL=()=>MAXL;const ZREQ=[0,.5,.57,.64,.7,.75,.8,.84,.88];const zReq=i=>i<1||i>=DZ||wp(i-1)>=ZREQ[i];const zNeed=i=>`${Math.round(ZREQ[i]*100)} % de progreso en ${ZN[i-1]}`;
 const lvl=()=>{let l=1;const c=capL();while((l<c||(c>=MAXL&&l<100000))&&S.xp>=xpFor(l+1))l++;return l};
-const SHL={pkm:22,pb:5,gb:12,ub:22,cap:16,zid:18,gaf:30,cal15:11,inc15:15,cha15:19,cal60:21,inc60:26,cha60:34,glo:46,per:47,cal:2,rare:3,inc:6,epic:10,plu:12,cha:14,saf:16,dol:18,leg:20,inc1:24,rad:25,ovl:28,rot:30,inc2:32,rads:35,inc3:40,dia:10,trb:14,wak:18,po:5,spo:12,upo:22,bay:5,sbay:12,ubay:22,ce:1};
-const UNL={2:"Encargos · Calcio",3:"Trueques · Huevos raros",5:"Expediciones · Pokéball · Poción · Baya",6:"Incienso",10:"Huevos épicos · Diario de campo",11:"Super Calcio",12:"Superball · Superpoción · Superbaya",14:"Bolsa de trotamundos",15:"Super Incienso",18:"Pokemuñeco · Despertador",21:"Ultra Calcio",22:"Ultraball · Ultrapoción · Ultrabaya · Pokemando",26:"Ultra Incienso",28:"Amuleto oval",30:"Rotom-chip"};
+const SHL={pkm:22,pb:5,gb:12,ub:22,cap:16,zid:18,gaf:30,cal15:11,inc15:15,cha15:19,cal60:21,inc60:26,cha60:34,glo:46,per:47,cal:2,rare:3,inc:6,epic:10,plu:12,cha:14,saf:16,dol:18,leg:20,ovl:28,rot:30,dia:10,wak:14,po:5,spo:12,upo:22,bay:5,sbay:12,ubay:22,ce:1};
+const UNL={2:"Encargos · Calcio",3:"Trueques · Huevos raros",5:"Expediciones · Pokéball · Poción · Baya",6:"Incienso",10:"Huevos épicos · Diario de campo",11:"Super Calcio",12:"Superball · Superpoción · Superbaya",14:"Despertador",15:"Super Incienso",18:"Pokemuñeco",21:"Ultra Calcio",22:"Ultraball · Ultrapoción · Ultrabaya · Pokemando",26:"Ultra Incienso",28:"Amuleto oval",30:"Rotom-chip"};
 const unl=k=>k==="dis"?S.zu.includes(DZ):k==="glo"||k==="per"?!!S.nat:SHL[k]===undefined||S.lv>=SHL[k];
 function addXP(n){const c=capL();S.xp=Math.min(S.xp+Math.round(n),c>=MAXL?1e9:xpFor(c+1)-1);const L=lvl();if(L>S.lv){const o=S.lv;S.lv=L;lvUp(o,L)}chkWorlds()}
 const WC=[0,3000,10000,30000,90000,250000,700000,1800000,5000000];
@@ -2994,7 +2994,7 @@ setInterval(alrUpd,1500);
 
 shinyFx=epW(shinyFx,()=>10);epicWild=epW(epicWild,w=>w.al?13:w.s?10:11);evoFx=epW(evoFx,(a,b,sh)=>sh?10:12);roulFx=epW(roulFx,(a,t,r,sh)=>sh?10:12);
 /* ---------- v1.0 · cuentas, ficha de entrenador, rankings y amigos ---------- */
-const VER="v6.0.4";
+const VER="v6.0.5";
 const FBCFG={apiKey:"AIzaSyAyck2RhT-jxKhF-NYbzLB6UjLwPLLc090",authDomain:"poke-shiny-hunter-b97b0.firebaseapp.com",projectId:"poke-shiny-hunter-b97b0",storageBucket:"poke-shiny-hunter-b97b0.firebasestorage.app",messagingSenderId:"263462194560",appId:"1:263462194560:web:3ddd7235c9fa1839594565"};
 const ON=!!(FBCFG.apiKey||window.__ON);
 const UMAIL=l=>l+"@players.pokeshinyhunter.app",UOK=/^[a-z0-9_]{3,16}$/;
