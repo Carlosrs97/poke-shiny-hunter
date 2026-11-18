@@ -442,7 +442,7 @@ body.paused *{animation-play-state:paused!important}
 </style><script data-goatcounter="https://pokeshinyhunter.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
 </head><body><div class="orbs"><i></i><i></i><i></i></div><div class="spot" id="spot"></div><main><div id="dex">
-<header class="top"><img id="mascot" alt="" title="¡Tócame!"><h1><span>POKE</span><b>SHINY HUNTER</b><i class="ver">v6.0.17</i></h1><div class="tzone" id="tzone"></div></header>
+<header class="top"><img id="mascot" alt="" title="¡Tócame!"><h1><span>POKE</span><b>SHINY HUNTER</b><i class="ver">v6.0.18</i></h1><div class="tzone" id="tzone"></div></header>
 <div class="scr"><div class="hud" id="bar"></div><div class="xp" id="xpb"></div><div id="zsel"></div><div id="alr"></div><div class="hud" id="pasv"></div><section id="tab"></section></div>
 </div>
 </main><nav id="nav"></nav>
@@ -879,7 +879,7 @@ async function openEgg0(){
   rdNew();
   const shiny=t==="bri"||Math.floor(Math.random()*den(rbo?2:1)*Math.pow(.85,trL(S.zone,"s1")))===0;if(shiny)info(m.id);
   {const _u=[gif(m.id,shiny),stat(m.id,shiny)];_u.forEach(preImg)}
-  await itemFlash();{const f=$("#egfx");if(f)f.style.display="none"}
+  await itemFlash(radar,rbo);{const f=$("#egfx");if(f)f.style.display="none"}
   const egg=$("#egg"),mon=$("#mon"),msg=$("#msg"),au=$("#aura"),E=EGGI[vt],pl=PAL[vt];mon.style.display="none";mon.style.zoom="";msg.textContent="";au.style.setProperty("--a",pl.p+"aa");
   if(pr){msg.innerHTML=`<span class="q" style="background:${Q[1].c}">✨ ¡${ITM[["cha","cha15","cha60"][tierOn("cha")-1]||"cha"][0]}!</span><br>El huevo común se ha convertido en un huevo raro`;snd(D.snd.pew);arp([659,880,1175],.06);const[px,py]=rect($("#egg"));spawn(30,px,py,{c:pl.b,sp:14,l:50,s:5})}
   const SPD=[1,1,.7,.45][tierOn("cal")];if(!on("cal")){au.classList.add("on");snd(D.snd.crack);egg.src=E[3];await z(450)}else{egg.src=E[2];await z(150*SPD);egg.src=E[3]}
@@ -1182,11 +1182,11 @@ const revealDZ=()=>S.zu.includes(DZ)||dexDone();
 const nextZ=()=>{for(let i=1;i<DZ;i++)if(!S.zu.includes(i))return i;return -1};
 const radNeed=id=>!S.seen[id]||downstream(id).some(d=>!S.seen[d]);
 function radarHas(){if(S.sel==="n"&&false)return false;const r=EG[S.sel].r,a=S.zone===DZ?0:r[0],b=S.zone===DZ?1000:r[1];return POOLS[S.zone].some(x=>radNeed(x.id)&&Math.min(x.lim,b)-Math.max(x.lim-x.w,a)>0)}
-async function itemFlash(){const rd=radR(),gm=gemR();if(!rd&&!gm)return;const has=rd&&(!!S.zc[S.zone]||radarHas());if(!has&&!gm)return;const st=$("#stage");if(!st)return;
+async function itemFlash(rd,gm){if(!rd&&!gm)return;const has=rd&&(!!S.zc[S.zone]||radarHas());if(!has&&!gm)return;const st=$("#stage");if(!st)return;
   const d=document.createElement("div");d.className="itf";d.innerHTML=(has?`<img class="a" src="${LS}items/poke-radar.png">`:"")+(gm?`<img class="b" src="${LS}items/star-piece.png">`:"");st.appendChild(d);
   if(has){tone(700,0,.07,"square",.05,1100);tone(1100,.08,.07,"square",.05,1500)}if(gm){[1319,1568,1976,2637].forEach((f,i)=>tone(f,(has?.18:0)+i*.06,.14,"triangle",.05))}
   await z(on("cal")?420:720);d.remove()}
-function eggFx(){const e=$("#egg"),f=$("#egfx");if(f&&!busy&&!eggClk)f.style.display="";const rd=radR(),gm=gemR(),dn=!!S.zc[S.zone],has=rd&&(dn||radarHas());if(e){e.classList.toggle("rdr",!!has);e.classList.toggle("gem",!!gm)}
+function eggFx(){const e=$("#egg"),f=$("#egfx");if(f&&!busy&&!eggClk)f.style.display="";const rd=radR(),gm=gemR(),dn=!!S.zc[S.zone],has=rd&&(dn||radarHas());if(e&&!opening){e.classList.toggle("rdr",!!has);e.classList.toggle("gem",!!gm)}
   if(f)f.innerHTML=(has?`<span class="efc rd"><img src="${LS}items/poke-radar.png">${ITM.rad[0]} · ${dn?"Mejora rareza, atributos y estrellas":"¡Activo en este huevo!"}</span>`:rd?`<span class="efc no"><img src="${LS}items/poke-radar.png">${ITM.rad[0]} · Sin Pokémon nuevos aquí</span>`:"")+(gm?`<span class="efc gm"><img src="${LS}items/star-piece.png">${ITM.rads[0]} · ¡Activo en este huevo!</span>`:"")}
 function eggTab(){
   if(busy&&$("#egg"))return;eggClk=0;
@@ -3016,7 +3016,7 @@ setInterval(alrUpd,1500);
 
 shinyFx=epW(shinyFx,()=>10);epicWild=epW(epicWild,w=>w.al?13:w.s?10:11);evoFx=epW(evoFx,(a,b,sh)=>sh?10:12);roulFx=epW(roulFx,(a,t,r,sh)=>sh?10:12);
 /* ---------- v1.0 · cuentas, ficha de entrenador, rankings y amigos ---------- */
-const VER="v6.0.17";
+const VER="v6.0.18";
 const FBCFG={apiKey:"AIzaSyAyck2RhT-jxKhF-NYbzLB6UjLwPLLc090",authDomain:"poke-shiny-hunter-b97b0.firebaseapp.com",projectId:"poke-shiny-hunter-b97b0",storageBucket:"poke-shiny-hunter-b97b0.firebasestorage.app",messagingSenderId:"263462194560",appId:"1:263462194560:web:3ddd7235c9fa1839594565"};
 const ON=!!(FBCFG.apiKey||window.__ON);
 const UMAIL=l=>l+"@players.pokeshinyhunter.app",UOK=/^[a-z0-9_]{3,16}$/;
